@@ -162,5 +162,32 @@
     /* Brighter light blue for dark mode */
     --deston-color: 140 50% 50%;
     /* Brighter emerald/teal for dark mode */
+
+    /* For blue (bg-blue-500) */
+    --blue-color: 210 100% 50%;
+    /* Bright blue */
+
+    /* For green (bg-green-500) */
+    --green-color: 120 70% 45%;
+    /* Bright green */
+
+    /* For yellow (bg-yellow-500) */
+    --yellow-color: 48 100% 50%;
+    /* Bright yellow */
+
+    /* For orange (bg-orange-400) */
+    --orange-color: 39, 100%, 50%;
+    /* Bright orange */
+
+    /* For purple (bg-purple-500) */
+    --purple-color: 270 70% 60%;
+    /* Bright purple */
+
+    /* For red (bg-red-500) */
+    --red-color: 0 75% 55%;
+    /* Bright red */
+    --crimson-color: 345 85% 45%;
+
+    --lime-color: 90 75% 45%;
   }
 }

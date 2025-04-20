@@ -1,12 +1,13 @@
 "use client"
 
-import { Clock, MoreHorizontal, RefreshCw, CheckCircle2, XCircle, Loader2, PauseCircle } from "lucide-react"
+import { Clock, MoreHorizontal, RefreshCw, CheckCircle2, XCircle, Loader2, PauseCircle, Timer } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Progress } from "@/components/ui/progress"
 import { Job } from "@/app/actions/job"
+import { calculatePercentage, calculateRatePerSecond, calculateTimeRemaining, getElapsedTime } from "@/lib/utils"
 
 interface JobCardProps {
     job: Job
@@ -54,7 +55,7 @@ export function JobCard({ job }: JobCardProps) {
 
     return (
         <Card
-            className="cursor-pointer hover:shadow-md transition-shadow overflow-hidden"
+            className="cursor-pointer hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full"
         >
             <div className={`h-1 ${getStatusColor(job.status)}`} />
             <CardHeader className="pb-2">
@@ -63,17 +64,22 @@ export function JobCard({ job }: JobCardProps) {
                         {getStatusIcon(job.status)}
                         <Badge className={`${getStatusColor(job.status)} text-white`}>{job.status}</Badge>
                     </div>
+                    <div className="flex items-center text-xs text-muted-foreground">
+                        <Timer className="h-3 w-3 mr-1" />
+                        <span>{getElapsedTime(new Date(job.created_at), new Date(job.updated_at))}</span>
+                    </div>
                 </div>
                 <CardTitle className="text-base truncate mt-2">{job.type}</CardTitle>
                 <CardDescription className="font-mono text-xs truncate">{job.id}</CardDescription>
             </CardHeader>
-            <CardContent className="pb-2">
+            <CardContent className="pb-2 flex-grow">
                 <div className="space-y-3">
                     <div className="flex justify-between text-sm">
                         <span>Progress:</span>
                         <span className="font-medium">{Math.round(progress)}%</span>
                     </div>
                     <Progress value={progress} className="h-2" />
+                    {job.status == "processing" && <p className="text-xs text-gray-500">{calculateTimeRemaining(new Date(job.created_at), new Date(job.updated_at), progress)}</p>}
                     {job.metrics && (
                         <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs mt-3 bg-muted p-2 rounded-md">
                             <div className="flex items-center justify-between">
@@ -102,15 +108,25 @@ export function JobCard({ job }: JobCardProps) {
                                     {job.metrics.failure_count.toLocaleString()}
                                 </span>
                             </div>
+                            <div className="flex items-center justify-between">
+                                <span>Success Rate:</span>
+                                <span className={`font-medium ${job.metrics.success_count > 0 ? "text-green-300" : ""}`}>
+                                    {calculatePercentage(job.metrics.success_count, job.metrics.processed_items, 2)}%
+                                </span>
+                            </div>
                             <div className="col-span-2 flex items-center justify-between border-t border-muted-foreground/20 pt-1 mt-1">
                                 <span>Batches Complete:</span>
                                 <span className="font-medium">{job.metrics.batches_complete} / {job.metrics.total_batches}</span>
+                            </div>
+                            <div className="col-span-2 flex items-center justify-between border-t border-muted-foreground/20 pt-1 mt-1">
+                                <span>Process Frequency:</span>
+                                <span className="font-medium">{calculateRatePerSecond(new Date(job.created_at), new Date(job.updated_at), job.metrics.processed_items)} hz</span>
                             </div>
                         </div>
                     )}
                 </div>
             </CardContent>
-            <CardFooter className="pt-0">
+            <CardFooter className="pt-2 mt-auto border-t border-muted-foreground/10">
                 <div className="w-full flex justify-between text-xs text-muted-foreground">
                     <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />

@@ -63,13 +63,8 @@ const navigation: NavGroup[] = [
         items: [
             {
                 title: "Zone Heatmap",
-                href: "/analytics/zone-heatmap",
+                href: "/analytics/heatmap",
                 icon: MapIcon,
-            },
-            {
-                title: "Alternative Heatmap",
-                href: "/analytics/alt-heatmap",
-                icon: Layout,
             },
             {
                 title: "Unplayable Maps",

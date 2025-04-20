@@ -17,12 +17,12 @@ export const MapDistributionChart = ({
     description = "Number of matches played on each map"
 }: MapDistributionChartProps) => {
     const chartData = [
-        { map: "Erangel", count: distribution.Baltic_Main, fill: "hsl(var(--erangel-color))" },
-        { map: "Miramar", count: distribution.Desert_Main, fill: "hsl(var(--miramar-color))" },
-        { map: "Rondo", count: distribution.Neon_Main, fill: "hsl(var(--rondo-color))" },
-        { map: "Taego", count: distribution.Tiger_Main, fill: "hsl(var(--taego-color))" },
-        { map: "Vikendi", count: distribution.DihorOtok_Main, fill: "hsl(var(--vikendi-color))" },
-        { map: "Deston", count: distribution.Kiki_Main, fill: "hsl(var(--deston-color))" },
+        { map: "Erangel", count: distribution.Baltic_Main, fill: "hsl(var(--green-color))" },
+        { map: "Miramar", count: distribution.Desert_Main, fill: "hsl(var(--orange-color))" },
+        { map: "Rondo", count: distribution.Neon_Main, fill: "hsl(var(--purple-color))" },
+        { map: "Taego", count: distribution.Tiger_Main, fill: "hsl(var(--lime-color))" },
+        { map: "Vikendi", count: distribution.DihorOtok_Main, fill: "hsl(var(--blue-color))" },
+        { map: "Deston", count: distribution.Kiki_Main, fill: "hsl(var(--red-color))" },
     ]
 
     const chartConfig = {
