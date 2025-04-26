@@ -22,8 +22,9 @@ export async function getUnplayableMapImage(
         const formattedStartDate = format(startDate, "yyyy-MM-dd")
         const formattedEndDate = format(endDate, "yyyy-MM-dd")
 
+        const baseURL = process.env.API_UNPLAYABLE_URL;
         // Construct the API URL
-        const apiUrl = new URL("http://localhost:5000/api/unplayable-map")
+        const apiUrl = new URL(`${baseURL}/api/unplayable-map`)
 
         // Add query parameters
         apiUrl.searchParams.append("map_name", mapName)
