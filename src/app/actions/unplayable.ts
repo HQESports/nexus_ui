@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache"
 import crypto from 'crypto'
 import fs from 'fs/promises'
 import path from 'path'
-import { put } from '@vercel/blob'
+import { put, list } from '@vercel/blob'
 
 export async function getUnplayableMapImage(
     mapName: string,
@@ -22,6 +22,46 @@ export async function getUnplayableMapImage(
         const formattedStartDate = format(startDate, "yyyy-MM-dd")
         const formattedEndDate = format(endDate, "yyyy-MM-dd")
 
+        // Generate a unique hash for the image
+        const paramsString = JSON.stringify({
+            mapName, formattedStartDate, formattedEndDate, threshold,
+            overlayColor, overlayOpacity, width, height
+        })
+        const hash = crypto.createHash('md5').update(paramsString).digest('hex')
+        const filename = `map-${hash}.png`
+        const relativePath = `/map-images/${filename}`
+
+        // Check if the blob already exists in Vercel (if in production)
+        if (process.env.VERCEL === '1') {
+            try {
+                // List blobs with the specific filename
+                const { blobs } = await list({ prefix: filename, limit: 1 });
+
+                // If the blob exists, return its URL directly
+                if (blobs.length > 0) {
+                    return blobs[0].url;
+                }
+            } catch (listError) {
+                // If listing fails, we'll just proceed to generate a new image
+                console.log("Unable to check for existing blob, will create new one:", listError);
+            }
+        } else {
+            // In development, check local filesystem
+            const publicDir = path.join(process.cwd(), 'public');
+            const mapImagesDir = path.join(publicDir, 'map-images');
+            const filePath = path.join(mapImagesDir, filename);
+
+            try {
+                // Check if file exists locally
+                await fs.access(filePath);
+                // If it exists, return the relative path
+                return relativePath;
+            } catch (accessError) {
+                // File doesn't exist, will create it below
+            }
+        }
+
+        // If we reach here, we need to generate the image
         const baseURL = process.env.API_UNPLAYABLE_URL;
 
         // Construct the API URL
@@ -36,15 +76,6 @@ export async function getUnplayableMapImage(
         apiUrl.searchParams.append("overlay_opacity", Math.round(overlayOpacity).toString())
         apiUrl.searchParams.append("width", width.toString())
         apiUrl.searchParams.append("height", height.toString())
-
-        // Generate a unique hash for the image
-        const paramsString = JSON.stringify({
-            mapName, formattedStartDate, formattedEndDate, threshold,
-            overlayColor, overlayOpacity, width, height
-        })
-        const hash = crypto.createHash('md5').update(paramsString).digest('hex')
-        const filename = `map-${hash}.png`
-        const relativePath = `/map-images/${filename}`
 
         // Fetch the image with increased timeout
         const controller = new AbortController()
@@ -64,9 +95,10 @@ export async function getUnplayableMapImage(
 
         // Choose storage method based on environment
         if (process.env.VERCEL === '1') {
-            // In Vercel production, use Vercel Blob Storage
+            // In Vercel production, use Vercel Blob Storage with allowOverwrite
             const { url } = await put(filename, new Blob([imageBuffer]), {
                 access: 'public',
+                allowOverwrite: true, // Add this to allow overwriting
             });
 
             return url;

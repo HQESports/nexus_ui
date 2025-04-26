@@ -15,6 +15,13 @@ const nextConfig: NextConfig = {
         port: '', // Remove the wildcard port
         pathname: '/**', // Use /** to match all paths
       },
+      {
+
+        protocol: 'https',
+        hostname: 'zhegunthacymly5i.public.blob.vercel-storage.com',
+        port: '', // Remove the wildcard port
+        pathname: '/**', // Use /** to match all paths
+      }
     ]
   },
   eslint: {
