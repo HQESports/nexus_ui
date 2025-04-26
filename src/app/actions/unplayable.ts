@@ -1,9 +1,11 @@
-// app/actions/getMapImage.ts
 'use server'
 
 import { format } from "date-fns"
 import { revalidatePath } from "next/cache"
 import crypto from 'crypto'
+import fs from 'fs/promises'
+import path from 'path'
+import { put } from '@vercel/blob'
 
 export async function getUnplayableMapImage(
     mapName: string,
@@ -21,7 +23,7 @@ export async function getUnplayableMapImage(
         const formattedEndDate = format(endDate, "yyyy-MM-dd")
 
         const baseURL = process.env.API_UNPLAYABLE_URL;
-        console.log(baseURL)
+
         // Construct the API URL
         const apiUrl = new URL(`${baseURL}/api/unplayable-map`)
 
@@ -57,8 +59,34 @@ export async function getUnplayableMapImage(
             throw new Error(`API request failed with status ${response.status}`)
         }
 
-        // Return the relative path to use with Next.js Image
-        return relativePath
+        // Get the image data as a buffer
+        const imageBuffer = await response.arrayBuffer()
+
+        // Choose storage method based on environment
+        if (process.env.VERCEL === '1') {
+            // In Vercel production, use Vercel Blob Storage
+            const { url } = await put(filename, new Blob([imageBuffer]), {
+                access: 'public',
+            });
+
+            return url;
+        } else {
+            // In development, save to local filesystem
+            const publicDir = path.join(process.cwd(), 'public');
+            const mapImagesDir = path.join(publicDir, 'map-images');
+
+            // Create directory if it doesn't exist
+            try {
+                await fs.mkdir(mapImagesDir, { recursive: true });
+            } catch (err) {
+                console.error("Error creating directory:", err);
+            }
+
+            const filePath = path.join(mapImagesDir, filename);
+            await fs.writeFile(filePath, Buffer.from(imageBuffer));
+
+            return relativePath;
+        }
     } catch (error) {
         console.error("Error fetching unplayable map image:", error)
         throw error
