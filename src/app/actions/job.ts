@@ -41,6 +41,7 @@ export interface ServerStatus {
     database: boolean;
     rabbit: boolean;
     server: boolean;
+    file_service: boolean;
 }
 
 export async function getJobs(): Promise<ActionReturn<Array<Job>>> {

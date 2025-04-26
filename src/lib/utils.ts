@@ -1,5 +1,7 @@
+import { TeamRequest, TeamResponse } from "@/app/actions/teams"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { Team } from "./models"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -198,4 +200,45 @@ export function validateParam(param: string | undefined, validValues: string[], 
 
   const normalizedParam = param.toLowerCase()
   return validValues.includes(normalizedParam) ? normalizedParam : defaultValue
+}
+
+
+/**
+ * Converts the Team model to the format expected by the API
+ * Use this when preparing data for the form
+ */
+export function teamToFormData(team: TeamRequest, imageFile?: File | null): FormData {
+  const formData = new FormData();
+
+  // Add team JSON as a form value
+  formData.append('team', JSON.stringify(team));
+
+  // Add image if provided
+  if (imageFile) {
+    formData.append('image', imageFile);
+  }
+
+  return formData;
+}
+
+/**
+* Converts MongoDB _id to the id format expected by the API
+*/
+export function convertTeamForApi(team: Team): TeamRequest {
+  const { id, imageUrl, ...rest } = team;
+  return rest;
+}
+
+/**
+* Converts API response to the team model format used in the application
+*/
+export function apiResponseToTeam(response: TeamResponse): Team {
+  return {
+    id: response.id,
+    name: response.name,
+    imageUrl: response.imageUrl,
+    esportTag: response.esportTag,
+    searchCount: response.searchCount as 2 | 3 | 4,
+    players: response.players,
+  };
 }

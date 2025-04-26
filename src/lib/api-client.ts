@@ -10,10 +10,6 @@ class ServerApiClient {
     private client: AxiosInstance;
 
     private constructor() {
-        // Verify we're on the server side
-        if (typeof window !== 'undefined') {
-            throw new Error('ServerApiClient should only be used on the server side');
-        }
 
         const baseURL = process.env.API_BASE_URL;
         const serviceToken = process.env.API_SERVICE_TOKEN;

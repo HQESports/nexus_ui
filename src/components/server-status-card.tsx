@@ -1,6 +1,6 @@
 import { getJobs, getServerStatus } from "@/app/actions/job";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Database, HardDrive, RabbitIcon, Server } from "lucide-react"
+import { Database, Folder, HardDrive, RabbitIcon, Server } from "lucide-react"
 
 export default async function StatusCard() {
     // Mock response data
@@ -56,6 +56,14 @@ export default async function StatusCard() {
                         <span>RabbitMQ</span>
                     </div>
                     <StatusIndicator isOnline={serverStatus.rabbit} />
+                </div>
+
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <Folder className="h-5 w-5 text-muted-foreground" />
+                        <span>File Service</span>
+                    </div>
+                    <StatusIndicator isOnline={serverStatus.file_service} />
                 </div>
             </CardContent>
         </Card>

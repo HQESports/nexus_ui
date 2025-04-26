@@ -12,7 +12,9 @@ import {
     Compass,
     Image,
     MapPin,
-    MapIcon
+    MapIcon,
+    Building,
+    Users2
 } from "lucide-react";
 
 import {
@@ -56,6 +58,11 @@ const navigation: NavGroup[] = [
                 href: "/jobs",
                 icon: Briefcase,
             },
+            {
+                title: "Teams",
+                href: "/teams",
+                icon: Users2
+            }
         ],
     },
     {
