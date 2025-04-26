@@ -1,6 +1,7 @@
 // app/layout.tsx
 import { LoadingOverlay } from '@/components/LoadingOverlay';
 import { NavigationLoadingProvider } from '@/components/NavigationLoadingProvider';
+import { Suspense } from 'react';
 
 export default function FullscreenLayout({
     children,
@@ -8,9 +9,11 @@ export default function FullscreenLayout({
     children: React.ReactNode
 }>) {
     return (
-        <NavigationLoadingProvider>
-            <LoadingOverlay />
-            {children}
-        </NavigationLoadingProvider>
+        <Suspense>
+            <NavigationLoadingProvider>
+                <LoadingOverlay />
+                {children}
+            </NavigationLoadingProvider>
+        </Suspense>
     );
 }

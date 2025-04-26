@@ -97,13 +97,15 @@ export default async function MapViewerPage({
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-4">
-                    <MapControlsWrapper
-                        initialMap={selectedMap}
-                        initialDateRange={dateRange}
-                        initialMatchTypes={matchTypes}
-                        initialStyle={selectedStyle}
-                        initialPhases={selectedPhases}
-                    />
+                    <Suspense>
+                        <MapControlsWrapper
+                            initialMap={selectedMap}
+                            initialDateRange={dateRange}
+                            initialMatchTypes={matchTypes}
+                            initialStyle={selectedStyle}
+                            initialPhases={selectedPhases}
+                        />
+                    </Suspense>
                 </div>
             </div>
         </div>

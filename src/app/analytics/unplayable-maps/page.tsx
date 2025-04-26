@@ -95,13 +95,15 @@ export default async function UnplayableMapPage({
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-4">
-                    <UnplayableMapControls
-                        initialMap={selectedMap}
-                        initialDateRange={dateRange}
-                        initialThreshold={threshold}
-                        initialOverlayColor={overlayColor}
-                        initialOverlayOpacity={overlayOpacity}
-                    />
+                    <Suspense>
+                        <UnplayableMapControls
+                            initialMap={selectedMap}
+                            initialDateRange={dateRange}
+                            initialThreshold={threshold}
+                            initialOverlayColor={overlayColor}
+                            initialOverlayOpacity={overlayOpacity}
+                        />
+                    </Suspense>
                 </div>
             </div>
         </div>
