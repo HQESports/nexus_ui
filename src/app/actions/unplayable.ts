@@ -23,6 +23,7 @@ export async function getUnplayableMapImage(
         const formattedEndDate = format(endDate, "yyyy-MM-dd")
 
         const baseURL = process.env.API_UNPLAYABLE_URL;
+        console.log(baseURL)
         // Construct the API URL
         const apiUrl = new URL(`${baseURL}/api/unplayable-map`)
 
