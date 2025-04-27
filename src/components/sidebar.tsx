@@ -84,8 +84,8 @@ const navigation: NavGroup[] = [
                 icon: Users,
             },
             {
-                title: "Rotation Analyzer",
-                href: "/analytics/rotation-analyzer",
+                title: "Team Rotations",
+                href: "/analytics/team-rotations",
                 icon: Compass,
             },
         ],
