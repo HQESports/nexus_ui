@@ -13,7 +13,7 @@ export default function MaintenancePage() {
   const formattedDate = format(estimatedCompletionDate, "MMMM d, yyyy")
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 p-4">
+    <div className="flex min-h-screen flex-col items-center justify-center w-full p-4">
       <Card className="mx-auto max-w-md shadow-lg">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
@@ -51,12 +51,12 @@ export default function MaintenancePage() {
           <p className="text-sm text-muted-foreground">Need immediate assistance? Contact our support team:</p>
           <Button variant="outline" className="w-full">
             <Mail className="mr-2 h-4 w-4" />
-            Contact Support
+            Womp Womp
           </Button>
         </CardFooter>
       </Card>
 
-      <p className="mt-8 text-sm text-slate-500">© {currentDate.getFullYear()} Your Company. All rights reserved.</p>
+      <p className="mt-8 text-sm text-slate-500">© {currentDate.getFullYear()} Fuck Krafton. All rights reserved.</p>
     </div>
   )
 }
