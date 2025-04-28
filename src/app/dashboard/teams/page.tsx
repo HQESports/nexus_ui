@@ -1,4 +1,4 @@
-import { getTeams } from "../actions/teams";
+import { getTeams } from "@/app/actions/teams";
 import { TeamCard } from "./team-card";
 import TeamList from "./teams-list";
 

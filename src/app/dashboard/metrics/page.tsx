@@ -1,6 +1,6 @@
 import { StatCard } from "@/components/stat-card";
 import { getServerApiClient } from "@/lib/api-client";
-import { getMatchDistribution } from "../actions/metrics";
+import { getMatchDistribution } from "@/app/actions/metrics";
 import { calculatePercentage, formatList, mapNameMap } from "@/lib/utils";
 import { MapDistributionChart } from "@/components/map-distribution-chart";
 import { CustomRadialChart } from "@/components/custom-radial-chart";
