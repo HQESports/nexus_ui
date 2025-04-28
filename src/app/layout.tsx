@@ -36,17 +36,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider>
-            <div className="flex w-full h-full">
-              <AppSidebar />
-              <main className="flex flex-col flex-1 w-full">
-                <Navbar />
-                <div className="flex-1 overflow-auto">
-                  {children}
-                </div>
-              </main>
-            </div>
-          </SidebarProvider>
+          {children}
           <Toaster />
         </ThemeProvider>
 

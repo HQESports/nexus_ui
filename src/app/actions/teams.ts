@@ -2,6 +2,7 @@
 'use server';
 
 import { getServerApiClient } from "@/lib/api-client";
+import { Match } from "./matches";
 
 // Define the types for player rotations
 export interface Position {
@@ -14,70 +15,35 @@ export interface PlayerRotation {
     rotation: Position[];
 }
 
-export interface MatchData {
-    MatchID: string;
+export type MatchTypes = "scrim" | "ranked" | "event"
+
+export interface MatchDataTiny {
     ShardID: string;
     MapName: string;
     GameMode: string;
     Duration: number;
-    IsCustomMatch: boolean;
     CreatedAt: string;
-    MatchType: string;
+    MatchType: MatchTypes;
     Processed: boolean;
-    ProcessedAt: string;
-    ImportedAt: string;
-    PlayerCount: number;
-    TeamCount: number;
-    TelemetryURL: string;
-    TelemetryData: {
-        SafeZones: {
-            Phase: number;
-            X: number;
-            Y: number;
-            Radius: number;
-        }[];
-        PlanePath: {
-            StartX: number;
-            StartY: number;
-            EndX: number;
-            EndY: number;
-        };
-    };
+}
+
+export interface TeamRotationTiny {
+    id: string;
+    match_id: string;
+    team_id: string;
+    match: MatchDataTiny;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface TeamRotation {
     id: string;
     match_id: string;
     team_id: string;
-    match: MatchData;
+    match: Match;
     player_rotations: PlayerRotation[];
     created_at: string;
     updated_at: string;
-}
-
-/**
- * Gets a team's rotations by team ID
- */
-export async function getTeamRotations(
-    teamId: string
-): Promise<ActionReturn<TeamRotation[]>> {
-    try {
-        const apiClient = getServerApiClient();
-        const response = await apiClient.get<TeamRotation[]>(`/api/teams/rotations/${teamId}`);
-
-        return {
-            success: true,
-            data: response.data,
-            error: undefined,
-        };
-    } catch (error) {
-        console.error(`Failed to get rotations for team ${teamId}:`, error);
-        return {
-            success: false,
-            data: undefined,
-            error: error instanceof Error ? error.message : 'An unknown error occurred',
-        };
-    }
 }
 
 // Type definitions
@@ -119,6 +85,63 @@ export interface ActionReturn<T> {
     data?: T;
     error?: string;
 }
+
+/**
+ * Gets a team's rotations by team ID
+ */
+export async function getTeamRotations(
+    teamId: string, startDate: Date, endDate: Date
+): Promise<ActionReturn<TeamRotationTiny[]>> {
+    try {
+        const apiClient = getServerApiClient();
+        const response = await apiClient.get<TeamRotationTiny[]>(
+            `/api/teams/rotations/${teamId}`,
+            {
+                params: {
+                    startDate: startDate.toISOString(),
+                    endDate: endDate.toISOString(),
+                },
+            }
+        );
+
+        return {
+            success: true,
+            data: response.data,
+            error: undefined,
+        };
+    } catch (error) {
+        console.error(`Failed to get rotations for team ${teamId}:`, error);
+        return {
+            success: false,
+            data: undefined,
+            error: error instanceof Error ? error.message : 'An unknown error occurred',
+        };
+    }
+}
+
+export async function getRotation(
+    rotationId: string
+): Promise<ActionReturn<TeamRotation>> {
+    try {
+        const apiClient = getServerApiClient();
+        const response = await apiClient.get<TeamRotation>(`/api/teams/rotation/${rotationId}`);
+
+        return {
+            success: true,
+            data: response.data,
+            error: undefined,
+        };
+    } catch (error) {
+        console.error(`Failed to get rotations for team ${rotationId}:`, error);
+        return {
+            success: false,
+            data: undefined,
+            error: error instanceof Error ? error.message : 'An unknown error occurred',
+        };
+    }
+}
+
+
 
 /**
  * Creates a new team with the provided data and image

@@ -14,7 +14,9 @@ import {
     MapPin,
     MapIcon,
     Building,
-    Users2
+    Users2,
+    Sparkle,
+    SkullIcon
 } from "lucide-react";
 
 import {
@@ -89,6 +91,21 @@ const navigation: NavGroup[] = [
                 icon: Compass,
             },
         ],
+    },
+    {
+        title: "AI",
+        items: [
+            {
+                title: "Zone AI",
+                href: "/ai/zone-ai",
+                icon: Sparkle,
+            },
+            {
+                title: "Killfeed AI",
+                href: "/ai/killfeed-ai",
+                icon: SkullIcon,
+            },
+        ]
     },
     {
         title: "Drop Maps",

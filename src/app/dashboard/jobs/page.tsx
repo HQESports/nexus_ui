@@ -1,5 +1,5 @@
 import React from 'react';
-import { getJobs, getJobTypes, Job } from '../actions/job';
+import { getJobs, getJobTypes, Job } from '@/app/actions/job';
 import { JobCard } from '@/components/job-card';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { JobTypesCard } from '@/components/job-types-card';
