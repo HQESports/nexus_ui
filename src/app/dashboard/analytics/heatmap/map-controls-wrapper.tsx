@@ -71,7 +71,7 @@ export function MapControlsWrapper({
         params.set(PARAM_NAMES.STYLE, selectedStyle)
 
         // Update the URL without refreshing the page
-        router.push(`/analytics/heatmap?${params.toString()}`, { scroll: false })
+        router.push(`?${params.toString()}`, { scroll: false })
     }, [router, searchParams, selectedMap, dateRange, matchTypes, selectedStyle, selectedPhases])
 
     // Update URL whenever any filter changes

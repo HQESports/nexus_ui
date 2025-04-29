@@ -39,14 +39,15 @@ function formatDateToYYYYMMDD(date: Date | undefined): string {
 export default async function MapViewerPage({
     searchParams,
 }: {
-    searchParams: { [key: string]: string | string[] | undefined }
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
+    const params = await searchParams
     // Extract parameters with defaults
-    const selectedMap = (searchParams[PARAM_NAMES.MAP] as string) || DEFAULT_VALUES.MAP
+    const selectedMap = (params[PARAM_NAMES.MAP] as string) || DEFAULT_VALUES.MAP
 
     // Parse dates from URL parameters
-    const fromDate = parseDate(searchParams[PARAM_NAMES.FROM_DATE] as string | null)
-    const toDate = parseDate(searchParams[PARAM_NAMES.TO_DATE] as string | null)
+    const fromDate = parseDate(params[PARAM_NAMES.FROM_DATE] as string | null)
+    const toDate = parseDate(params[PARAM_NAMES.TO_DATE] as string | null)
 
     // Create date range object if we have dates
     const dateRange = fromDate
@@ -57,13 +58,13 @@ export default async function MapViewerPage({
         : undefined
 
     // Parse match types from comma-separated list
-    const matchTypes = parseCommaSeparatedList(searchParams[PARAM_NAMES.MATCH_TYPES], DEFAULT_VALUES.MATCH_TYPES)
+    const matchTypes = parseCommaSeparatedList(params[PARAM_NAMES.MATCH_TYPES], DEFAULT_VALUES.MATCH_TYPES)
 
     // Parse phases from comma-separated list
-    const selectedPhases = parseCommaSeparatedList(searchParams[PARAM_NAMES.PHASES], DEFAULT_VALUES.PHASES)
+    const selectedPhases = parseCommaSeparatedList(params[PARAM_NAMES.PHASES], DEFAULT_VALUES.PHASES)
 
     // Get selected style
-    const selectedStyle = (searchParams[PARAM_NAMES.STYLE] as string) || DEFAULT_VALUES.STYLE
+    const selectedStyle = (params[PARAM_NAMES.STYLE] as string) || DEFAULT_VALUES.STYLE
 
     const result = await getFilteredMatches({
         mapName: selectedMap,
