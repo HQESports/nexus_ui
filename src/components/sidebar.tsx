@@ -45,6 +45,8 @@ type NavGroup = {
     items: NavItem[];
 };
 
+const baseURL = "/dashboard";
+
 // Define our navigation structure
 const navigation: NavGroup[] = [
     {
@@ -52,17 +54,17 @@ const navigation: NavGroup[] = [
         items: [
             {
                 title: "Analytics",
-                href: "/metrics",
+                href: "/dashboard/metrics",
                 icon: BarChart,
             },
             {
                 title: "Jobs",
-                href: "/jobs",
+                href: "/dashboard/jobs",
                 icon: Briefcase,
             },
             {
                 title: "Teams",
-                href: "/teams",
+                href: "/dashboard/teams",
                 icon: Users2
             }
         ],
@@ -72,22 +74,22 @@ const navigation: NavGroup[] = [
         items: [
             {
                 title: "Zone Heatmap",
-                href: "/analytics/heatmap",
+                href: "/dashboard/analytics/heatmap",
                 icon: MapIcon,
             },
             {
                 title: "Unplayable Maps",
-                href: "/analytics/unplayable-maps",
+                href: "/dashboard/analytics/unplayable-maps",
                 icon: Map,
             },
             {
                 title: "IGL Simulator",
-                href: "/analytics/igl-simulator",
+                href: "/dashboard/analytics/igl-simulator",
                 icon: Users,
             },
             {
                 title: "Team Rotations",
-                href: "/analytics/team-rotations",
+                href: "/dashboard/analytics/team-rotations",
                 icon: Compass,
             },
         ],
@@ -97,12 +99,12 @@ const navigation: NavGroup[] = [
         items: [
             {
                 title: "Zone AI",
-                href: "/ai/zone-ai",
+                href: "/dashboard/ai/zone-ai",
                 icon: Sparkle,
             },
             {
                 title: "Killfeed AI",
-                href: "/ai/killfeed-ai",
+                href: "/dashboard/ai/killfeed-ai",
                 icon: SkullIcon,
             },
         ]
@@ -112,17 +114,17 @@ const navigation: NavGroup[] = [
         items: [
             {
                 title: "Generator",
-                href: "/dropmaps/generator",
+                href: "/dashboard/dropmaps/generator",
                 icon: Layers,
             },
             {
                 title: "Logo Manager",
-                href: "/dropmaps/logo-manager",
+                href: "/dashboard/dropmaps/logo-manager",
                 icon: Image,
             },
             {
                 title: "Spots Manager",
-                href: "/dropmaps/spots-manager",
+                href: "/dashboard/dropmaps/spots-manager",
                 icon: MapPin,
             },
         ],
@@ -135,7 +137,12 @@ export function AppSidebar() {
     return (
         <Sidebar>
             <SidebarHeader className="py-4 px-6 border-b">
-                <h2 className="text-xl font-bold">NEXUS</h2>
+                <a
+                    href="/dashboard/nexus"
+                    className="text-xl font-bold bg-none  block px-2 py-1 rounded"
+                >
+                    NEXUS
+                </a>
             </SidebarHeader>
             <SidebarContent>
                 {navigation.map((group) => (
