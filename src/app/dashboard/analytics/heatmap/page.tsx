@@ -69,8 +69,8 @@ export default async function MapViewerPage({
     const result = await getFilteredMatches({
         mapName: selectedMap,
         matchTypes: matchTypes,
-        startDate: formatDateToYYYYMMDD(fromDate),
-        endDate: formatDateToYYYYMMDD(toDate),
+        from: formatDateToYYYYMMDD(fromDate),
+        to: formatDateToYYYYMMDD(toDate),
         limit: 100000
     });
     if (result.error) {

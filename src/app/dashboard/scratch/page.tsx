@@ -1,20 +1,33 @@
-"use client"
+"use client";
 
-import { DateRangePicker } from "@/components/ui/date-range-picker";
 
-export default function Scratch() {
+import Head from 'next/head';
+
+import BaseCanvas from './base-canvas';
+import { Rect } from 'react-konva';
+
+export default function CanvasPage() {
     return (
-        <div className="flex flex-col items-center justify-center h-screen">
-            <h1 className="text-2xl font-bold mb-4">Scratch Page</h1>
-            <p className="text-gray-600">This is a placeholder for your scratch page.</p>
-            <DateRangePicker
-                onUpdate={(values) => console.log(values)}
-                initialDateFrom="2023-01-01"
-                initialDateTo="2023-12-31"
-                align="center"
-                locale="en-GB"
-                showCompare={false}
-            />
+        <div style={{ padding: '20px' }}>
+            <Head>
+                <title>Zoomable Canvas</title>
+                <meta name="description" content="A zoomable and pannable canvas using React Konva" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+
+            <main>
+                <h1 style={{ marginBottom: '20px' }}>Zoomable Canvas with React Konva</h1>
+                <BaseCanvas mapName={''} minZoom={1} maxZoom={5}>
+                    <Rect
+                        x={20}
+                        y={20}
+                        width={50}
+                        height={50}
+                        fill="red"
+                        shadowBlur={5}
+                    />
+                </BaseCanvas>
+            </main>
         </div>
-    )
-}
+    );
+};

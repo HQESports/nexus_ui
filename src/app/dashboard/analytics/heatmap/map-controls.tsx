@@ -1,6 +1,6 @@
 "use client"
 
-import { CalendarIcon, ChevronsUpDown } from "lucide-react"
+import { Bold, CalendarIcon, ChevronsUpDown, Italic, Underline } from "lucide-react"
 import { format } from "date-fns"
 import type { DateRange } from "react-day-picker"
 
@@ -12,6 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { MAP_OPTIONS, MATCH_TYPE_OPTIONS, PHASE_OPTIONS, STYLE_OPTIONS } from "./constants"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import ReducerIcon from "@/components/ui/reducer-icon"
+import ModeToggle from "./analysis-mode-toggle"
+import { Switch } from "@/components/ui/switch"
+import { Separator } from "@radix-ui/react-separator"
 
 interface MapControlsProps {
     selectedMap: string
@@ -194,7 +199,24 @@ export function MapControls({
                         ))}
                     </SelectContent>
                 </Select>
+                {/* Analysis controls */}
+                <div className="space-y-2 flex flex-col items-center">
+                    <Label>Analysis Mode</Label>
+                    <ModeToggle size="sm" />
+                    <ToggleGroup type="multiple">
+                        <ToggleGroupItem value="bold" aria-label="Toggle bold">
+                            <Bold className="h-4 w-4" />
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="italic" aria-label="Toggle italic">
+                            <Italic className="h-4 w-4" />
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="strikethrough" aria-label="Toggle strikethrough">
+                            <Underline className="h-4 w-4" />
+                        </ToggleGroupItem>
+                    </ToggleGroup>
+                </div>
             </div>
         </div>
+
     )
 }

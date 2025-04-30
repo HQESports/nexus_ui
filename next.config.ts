@@ -12,15 +12,14 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'nexusbucketpubg.s3.us-east-2.amazonaws.com',
-        port: '', // Remove the wildcard port
-        pathname: '/**', // Use /** to match all paths
+        port: '',
+        pathname: '/**',
       },
       {
-
         protocol: 'https',
         hostname: 'zhegunthacymly5i.public.blob.vercel-storage.com',
-        port: '', // Remove the wildcard port
-        pathname: '/**', // Use /** to match all paths
+        port: '',
+        pathname: '/**',
       }
     ]
   },
@@ -30,7 +29,12 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-
+  reactStrictMode: true,
+  webpack: (config) => {
+    // This is to handle the canvas module not found error
+    config.externals = [...(config.externals || []), { canvas: "canvas" }];
+    return config;
+  },
 };
 
 module.exports = nextConfig;

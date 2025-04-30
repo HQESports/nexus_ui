@@ -264,7 +264,7 @@ export function UnplayableMapControls({
                 {isNavigating ? (
                     <>
                         <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                        Generating Map...
+                        Loading Goonology...
                     </>
                 ) : (
                     'Update Map'
