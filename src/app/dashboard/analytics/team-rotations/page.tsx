@@ -9,7 +9,7 @@ export default async function RotationsPage({
 }: {
     searchParams: { [key: string]: string | undefined }
 }) {
-    const { teamID, rotationID, startDate, endDate } = searchParams
+    const { teamID, rotationID, startDate, endDate } = await searchParams
     const { success, data: teams, error } = await getTeams()
 
     if (!teams) {

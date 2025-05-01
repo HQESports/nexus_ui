@@ -66,7 +66,7 @@ export default function RotationControls({ teams, teamID, rotations, styleOption
             params.set("endDate", dateRange.to?.toISOString() || "")
         }
 
-        router.push(`/analytics/team-rotations?${params.toString()}`)
+        router.push(`?${params.toString()}`)
     }
 
     const teamOptions = teams.map((team) => {
