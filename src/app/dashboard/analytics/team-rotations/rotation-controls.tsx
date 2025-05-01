@@ -68,7 +68,6 @@ export default function RotationControls({ teams, teamID, rotations, styleOption
         }
 
         router.push(`/analytics/team-rotations?${params.toString()}`)
-        console.log(params.toString())
     }
 
     const teamOptions = teams.map((team) => {
@@ -114,7 +113,6 @@ export default function RotationControls({ teams, teamID, rotations, styleOption
 
     const onDateRangeChange = (value: DateRange) => {
         if (value.from && value.to) {
-            console.log(value)
             setDateRange(value)
             setSearchParams(selectedTeam?.id, selectedRotationID, value)
         }

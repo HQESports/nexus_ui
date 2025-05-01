@@ -43,7 +43,7 @@ export default function BaseCanvas({
 
   // Load background image
   useEffect(() => {
-    const MAP_IMG_URL = MAP_IMAGES[mapName] || '/maps/Erangel_Main_No_Text_High_Res.png';
+    const MAP_IMG_URL = MAP_IMAGES[mapName] || '/maps/Erangel_Main_No_Text_Low_Res.png';
     const image = new window.Image();
     image.src = MAP_IMG_URL; // Replace with your image URL
     image.onload = () => {
@@ -168,6 +168,24 @@ export default function BaseCanvas({
             />
           )}
           {children}
+          <Circle
+            x={CANVAS_SIZE / 2}
+            y={CANVAS_SIZE / 2}
+            radius={100}
+            fill="transparent"
+            stroke="black"
+            dash={[10, 5]}
+            strokeWidth={4}
+            opacity={1}
+            zIndex={1000}
+            draggable={true}
+            dragBoundFunc={(pos) => {
+              const constrainedPos = constrainPosition(pos, scale);
+              return constrainedPos;
+            }
+            }
+          />
+
         </Layer>
       </Stage>
     </div>

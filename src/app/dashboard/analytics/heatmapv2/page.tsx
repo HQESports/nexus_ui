@@ -27,8 +27,6 @@ export default async function HeatmapPage({
         limit: limit
     }
     const result = await getFilteredMatches(filterParams);
-
-    console.log(result.data?.count)
     if (result.error) {
         return <div>{result.error}</div>
     }

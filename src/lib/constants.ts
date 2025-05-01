@@ -12,7 +12,7 @@ export const MAP_OPTIONS = [
 
 // Map image paths
 export const MAP_IMAGES: Record<string, string> = {
-    Baltic_Main: "/maps/Erangel_Main_No_Text_High_Res.png",
+    Baltic_Main: "/maps/Erangel_Main_No_Text_Low_Res.png",
     Desert_Main: "/maps/Miramar_Main_No_Text_Low_Res.png",
     Neon_Main: "/maps/Rondo_Main_No_Text_Low_Res.png",
     Tiger_Main: "/maps/Taego_Main_No_Text_Low_Res.png",
