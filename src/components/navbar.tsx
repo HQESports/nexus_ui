@@ -9,7 +9,7 @@ interface NavbarProps {
 export function Navbar({ className }: NavbarProps) {
     return (
         <div className={cn("border-b w-full", className)}>
-            <div className="flex h-15 items-center px-6">
+            <div className="flex h-17 items-center px-6">
                 <div className="flex items-center">
                     <h1 className="text-xl font-bold">Nexus</h1>
                 </div>

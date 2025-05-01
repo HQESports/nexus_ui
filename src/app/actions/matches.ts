@@ -61,8 +61,8 @@ export interface ActionReturn<T> {
 export interface FilteredMatchesParams {
     mapName: string;
     matchTypes?: string[];
-    startDate?: string | null;
-    endDate?: string | null;
+    from?: string | null;
+    to?: string | null;
     limit?: number;
 }
 
@@ -86,12 +86,12 @@ export async function getFilteredMatches(params: FilteredMatchesParams): Promise
             queryParams.append('match_type', params.matchTypes.join(','));
         }
 
-        if (params.startDate) {
-            queryParams.append('start_date', params.startDate);
+        if (params.from) {
+            queryParams.append('start_date', params.from);
         }
 
-        if (params.endDate) {
-            queryParams.append('end_date', params.endDate);
+        if (params.to) {
+            queryParams.append('end_date', params.to);
         }
 
         if (params.limit) {

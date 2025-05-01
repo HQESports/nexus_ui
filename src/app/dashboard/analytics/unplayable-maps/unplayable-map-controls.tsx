@@ -3,7 +3,7 @@
 
 import type React from "react"
 
-import { useCallback, useEffect, useState } from "react"
+import { Suspense, useCallback, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { format } from "date-fns"
 import { CalendarIcon, RefreshCw } from "lucide-react"
@@ -138,138 +138,140 @@ export function UnplayableMapControls({
     }
 
     return (
-        <div className="space-y-6">
-            {/* Map Selection */}
-            <div className="space-y-2">
-                <Label htmlFor="map-select">Map</Label>
-                <Select
-                    value={selectedMap}
-                    onValueChange={setSelectedMap}
-                    disabled={isNavigating}
-                >
-                    <SelectTrigger id="map-select">
-                        <SelectValue placeholder="Select map" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {MAP_OPTIONS.map((option) => (
-                            <SelectItem key={option.id} value={option.id}>
-                                {option.label}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
-
-            {/* Date Range Picker */}
-            <div className="space-y-2">
-                <Label>Date Range</Label>
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
-                            variant="outline"
-                            className={cn("w-full justify-start text-left font-normal", !dateRange && "text-muted-foreground")}
-                            disabled={isNavigating}
-                        >
-                            <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-                            <div className="truncate">{formatDateRange()}</div>
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                            initialFocus
-                            mode="range"
-                            defaultMonth={dateRange?.from}
-                            selected={dateRange}
-                            onSelect={(range) => range && setDateRange(range)}
-                            numberOfMonths={2}
-                            disabled={isNavigating}
-                        />
-                    </PopoverContent>
-                </Popover>
-            </div>
-
-            {/* Threshold Slider */}
-            <div className="space-y-2">
-                <div className="flex justify-between">
-                    <Label htmlFor="threshold-slider">Threshold</Label>
-                    <span className="text-sm text-muted-foreground">{threshold.toFixed(2)}</span>
+        <Suspense fallback={<div className="text-center">Loading controls...</div>}>
+            <div className="space-y-6">
+                {/* Map Selection */}
+                <div className="space-y-2">
+                    <Label htmlFor="map-select">Map</Label>
+                    <Select
+                        value={selectedMap}
+                        onValueChange={setSelectedMap}
+                        disabled={isNavigating}
+                    >
+                        <SelectTrigger id="map-select">
+                            <SelectValue placeholder="Select map" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {MAP_OPTIONS.map((option) => (
+                                <SelectItem key={option.id} value={option.id}>
+                                    {option.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
-                <Slider
-                    id="threshold-slider"
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    value={[threshold]}
-                    onValueChange={(values) => setThreshold(values[0])}
-                    disabled={isNavigating}
-                />
-            </div>
 
-            {/* Overlay Color */}
-            <div className="space-y-2">
-                <Label htmlFor="overlay-color">Overlay Color</Label>
-                <div className="grid gap-2">
-                    <div className="flex items-center gap-2">
-                        <Input
-                            id="overlay-color"
-                            type="color"
-                            value={`#${overlayColor}`}
-                            onChange={(e) => {
-                                // Remove the # and update state
-                                const color = e.target.value.replace("#", "")
-                                setOverlayColor(color)
-                            }}
-                            className="w-12 h-10 p-1 cursor-pointer"
-                            disabled={isNavigating}
-                        />
-                        <Input
-                            type="text"
-                            value={overlayColor}
-                            onChange={handleColorChange}
-                            className="flex-1"
-                            maxLength={6}
-                            placeholder="FF0000"
-                            disabled={isNavigating}
-                        />
+                {/* Date Range Picker */}
+                <div className="space-y-2">
+                    <Label>Date Range</Label>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant="outline"
+                                className={cn("w-full justify-start text-left font-normal", !dateRange && "text-muted-foreground")}
+                                disabled={isNavigating}
+                            >
+                                <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
+                                <div className="truncate">{formatDateRange()}</div>
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                                initialFocus
+                                mode="range"
+                                defaultMonth={dateRange?.from}
+                                selected={dateRange}
+                                onSelect={(range) => range && setDateRange(range)}
+                                numberOfMonths={2}
+                                disabled={isNavigating}
+                            />
+                        </PopoverContent>
+                    </Popover>
+                </div>
+
+                {/* Threshold Slider */}
+                <div className="space-y-2">
+                    <div className="flex justify-between">
+                        <Label htmlFor="threshold-slider">Threshold</Label>
+                        <span className="text-sm text-muted-foreground">{threshold.toFixed(2)}</span>
                     </div>
-                    <div className="h-8 rounded border" style={{ backgroundColor: `#${overlayColor}` }} aria-hidden="true" />
+                    <Slider
+                        id="threshold-slider"
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        value={[threshold]}
+                        onValueChange={(values) => setThreshold(values[0])}
+                        disabled={isNavigating}
+                    />
                 </div>
-            </div>
 
-            {/* Overlay Opacity */}
-            <div className="space-y-2">
-                <div className="flex justify-between">
-                    <Label htmlFor="opacity-slider">Overlay Opacity</Label>
-                    <span className="text-sm text-muted-foreground">
-                        {(overlayOpacity / 255).toFixed(2)} ({Math.round(overlayOpacity)} / 255)
-                    </span>
+                {/* Overlay Color */}
+                <div className="space-y-2">
+                    <Label htmlFor="overlay-color">Overlay Color</Label>
+                    <div className="grid gap-2">
+                        <div className="flex items-center gap-2">
+                            <Input
+                                id="overlay-color"
+                                type="color"
+                                value={`#${overlayColor}`}
+                                onChange={(e) => {
+                                    // Remove the # and update state
+                                    const color = e.target.value.replace("#", "")
+                                    setOverlayColor(color)
+                                }}
+                                className="w-12 h-10 p-1 cursor-pointer"
+                                disabled={isNavigating}
+                            />
+                            <Input
+                                type="text"
+                                value={overlayColor}
+                                onChange={handleColorChange}
+                                className="flex-1"
+                                maxLength={6}
+                                placeholder="FF0000"
+                                disabled={isNavigating}
+                            />
+                        </div>
+                        <div className="h-8 rounded border" style={{ backgroundColor: `#${overlayColor}` }} aria-hidden="true" />
+                    </div>
                 </div>
-                <Slider
-                    id="opacity-slider"
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    value={[overlayOpacity / 255]}
-                    onValueChange={(values) => setOverlayOpacity(Math.round(values[0] * 255))}
-                    disabled={isNavigating}
-                />
-            </div>
 
-            {/* Submit Button */}
-            <Button
-                className="w-full"
-                onClick={handleSubmit}
-                disabled={isNavigating || !isDirty}
-            >
-                {isNavigating ? (
-                    <>
-                        <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                        Generating Map...
-                    </>
-                ) : (
-                    'Update Map'
-                )}
-            </Button>
-        </div>
+                {/* Overlay Opacity */}
+                <div className="space-y-2">
+                    <div className="flex justify-between">
+                        <Label htmlFor="opacity-slider">Overlay Opacity</Label>
+                        <span className="text-sm text-muted-foreground">
+                            {(overlayOpacity / 255).toFixed(2)} ({Math.round(overlayOpacity)} / 255)
+                        </span>
+                    </div>
+                    <Slider
+                        id="opacity-slider"
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        value={[overlayOpacity / 255]}
+                        onValueChange={(values) => setOverlayOpacity(Math.round(values[0] * 255))}
+                        disabled={isNavigating}
+                    />
+                </div>
+
+                {/* Submit Button */}
+                <Button
+                    className="w-full"
+                    onClick={handleSubmit}
+                    disabled={isNavigating || !isDirty}
+                >
+                    {isNavigating ? (
+                        <>
+                            <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                            Loading Goonology...
+                        </>
+                    ) : (
+                        'Update Map'
+                    )}
+                </Button>
+            </div>
+        </Suspense>
     )
 }

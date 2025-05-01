@@ -67,7 +67,6 @@ export function JobSelector({ jobTypes }: JobSelectorProps) {
             // Handle the result
             if (result.success) {
                 toast?.success("Job cancelled successfully");
-                console.log("Job cancelled successfully");
             } else {
                 toast?.error(result.error);
             }

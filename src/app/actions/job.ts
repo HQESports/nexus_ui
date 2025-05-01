@@ -111,7 +111,6 @@ export async function startJob(jobType: string): Promise<ActionReturn<Job>> {
 export async function cancelJob(jobType: string): Promise<ActionReturn<string>> {
     try {
         const apiClient = getServerApiClient();
-        console.log(jobType)
         const response = await apiClient.delete<{ message: string, error: string }>(`/api/jobs/${jobType}`);
 
         return {

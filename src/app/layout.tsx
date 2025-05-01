@@ -29,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="flex h-screen overflow-hidden">
+      <body className="flex h-screen">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
