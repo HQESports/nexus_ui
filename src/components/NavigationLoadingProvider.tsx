@@ -1,7 +1,7 @@
 // components/NavigationLoadingProvider.tsx
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, Suspense } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 // Define context type
@@ -48,9 +48,11 @@ export function NavigationLoadingProvider({ children }: NavigationLoadingProvide
     }, [pathname, searchParams]);
 
     return (
-        <NavigationLoadingContext.Provider value={{ isNavigating, setIsNavigating }}>
-            {children}
-        </NavigationLoadingContext.Provider>
+        <Suspense fallback={<div className="flex items-center justify-center h-full w-full p-8 text-center text-white">Loading...</div>}>
+            <NavigationLoadingContext.Provider value={{ isNavigating, setIsNavigating }}>
+                {children}
+            </NavigationLoadingContext.Provider>
+        </Suspense>
     );
 }
 

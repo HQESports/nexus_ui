@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import MapFilterSelect from "./map-filter";
 import { DEFAULT_DATE_RANGE, DEFAULT_LIMIT, DEFAULT_MAP_OPTION, DEFAULT_TYPE_OPTION, LIMIT_MAX, LIMIT_MIN, MAP_OPTIONS, MATCH_TYPE_OPTIONS, PARAM_NAMES } from "@/lib/constants";
 import { DateRange } from "react-day-picker";
@@ -86,57 +86,58 @@ export default function MatchFilter({ filterParams, count }: MatchFilterProps) {
     }
 
     return (
-        <SidebarGroup className="border-b-2">
-            <SidebarGroupContent className="space-y-3">
-                <div className="text-lg w-full text-center text-primary font-bold">Match Filters</div>
-                <div className="flex items-center justify-between">
-                    <Label>Matches Found</Label>
-                    {limit == count ? <Badge className="bg-yellow-400">{count}/{limit}</Badge> : <Badge className="bg-green-400">{count}/{limit}</Badge>}
-                </div>
-                {/* Map filter */}
-                <Label>Map Selection</Label>
-                <Select onValueChange={handleMapChange} disabled={isLoading} value={selectedMap}>
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select map" className="w-full" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {MAP_OPTIONS.map((map) => (
-                            <SelectItem key={map.id} value={map.id}>
-                                {map.label}
-                            </SelectItem>
+        <Suspense fallback={<div>Loading match filters...</div>}>
+            <SidebarGroup className="border-b-2">
+                <SidebarGroupContent className="space-y-3">
+                    <div className="text-lg w-full text-center text-primary font-bold">Match Filters</div>
+                    <div className="flex items-center justify-between">
+                        <Label>Matches Found</Label>
+                        {limit == count ? <Badge className="bg-yellow-400">{count}/{limit}</Badge> : <Badge className="bg-green-400">{count}/{limit}</Badge>}
+                    </div>
+                    {/* Map filter */}
+                    <Label>Map Selection</Label>
+                    <Select onValueChange={handleMapChange} disabled={isLoading} value={selectedMap}>
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select map" className="w-full" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {MAP_OPTIONS.map((map) => (
+                                <SelectItem key={map.id} value={map.id}>
+                                    {map.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+
+                    {/* Match Type Filter */}
+                    <Label>Select Match Type</Label>
+                    <ToggleGroup type="multiple" className="w-full" variant="outline" value={matchTypes} onValueChange={handleTypeChange} >
+                        {MATCH_TYPE_OPTIONS.map((option) => (
+                            <ToggleGroupItem
+                                key={option.id}
+                                value={option.id}
+                                className="w-full hover:bg-transparent"
+                            >
+                                {option.label}
+                            </ToggleGroupItem>
                         ))}
-                    </SelectContent>
-                </Select>
+                    </ToggleGroup>
 
-                {/* Match Type Filter */}
-                <Label>Select Match Type</Label>
-                <ToggleGroup type="multiple" className="w-full" variant="outline" value={matchTypes} onValueChange={handleTypeChange} >
-                    {MATCH_TYPE_OPTIONS.map((option) => (
-                        <ToggleGroupItem
-                            key={option.id}
-                            value={option.id}
-                            className="w-full hover:bg-transparent"
-                        >
-                            {option.label}
-                        </ToggleGroupItem>
-                    ))}
-                </ToggleGroup>
-
-                {/* Date Range Selector */}
-                <Label>Date Range</Label>
-                <DateRangePicker
-                    onUpdate={(value) => handleDateRange(value.range)}
-                    initialDateFrom={dateRange.from}
-                    initialDateTo={dateRange.to}
-                    align="start"
-                    locale="en-GB"
-                    showCompare={false}
-                />
-                <Label>Matches Limit</Label>
-                <Input type="number" placeholder="Limit" className="w-full" value={limit} onChange={handleLimitChange} />
-                <Button className="w-full mb-2" onClick={() => setParams()}>Filter Matches</Button>
-            </SidebarGroupContent>
-        </SidebarGroup >
-
+                    {/* Date Range Selector */}
+                    <Label>Date Range</Label>
+                    <DateRangePicker
+                        onUpdate={(value) => handleDateRange(value.range)}
+                        initialDateFrom={dateRange.from}
+                        initialDateTo={dateRange.to}
+                        align="start"
+                        locale="en-GB"
+                        showCompare={false}
+                    />
+                    <Label>Matches Limit</Label>
+                    <Input type="number" placeholder="Limit" className="w-full" value={limit} onChange={handleLimitChange} />
+                    <Button className="w-full mb-2" onClick={() => setParams()}>Filter Matches</Button>
+                </SidebarGroupContent>
+            </SidebarGroup >
+        </Suspense>
     )
 }

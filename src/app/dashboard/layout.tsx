@@ -14,21 +14,17 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <NavigationLoadingProvider>
-      <LoadingOverlay />
-      <SidebarProvider>
-        <div className="flex w-full h-screen">
-          <AppSidebar />
-          <main className="flex flex-col flex-1 w-full">
-            <Navbar />
-            <div className="flex-1 h-[calc(100vh-64px)]">
-              <Suspense>
-                {children}
-              </Suspense>
-            </div>
-          </main>
-        </div>
-      </SidebarProvider>
-    </NavigationLoadingProvider>
+    <SidebarProvider>
+      <div className="flex w-full h-screen">
+        <AppSidebar />
+        <main className="flex flex-col flex-1 w-full">
+          <Navbar />
+          <div className="flex-1 h-[calc(100vh-64px)]">
+            {children}
+
+          </div>
+        </main>
+      </div>
+    </SidebarProvider>
   );
 }
