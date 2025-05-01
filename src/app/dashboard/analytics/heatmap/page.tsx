@@ -1,78 +1,33 @@
-import { Suspense } from "react"
-import { parse } from "date-fns"
-import { MapCanvas } from "./map-canvas"
-import { MapControlsWrapper } from "./map-controls-wrapper"
-import { DEFAULT_VALUES, PARAM_NAMES } from "./constants"
-import { getFilteredMatches } from "@/app/actions/matches"
+// In your HeatmapPage component
+import { DEFAULT_DATE_RANGE, DEFAULT_LIMIT, DEFAULT_MAP_OPTION, DEFAULT_TYPE_OPTION, PARAM_NAMES } from "@/lib/constants";
+import HeatmapWrapper from "./heatmap-wrapper";
+import { FilteredMatchesParams, getFilteredMatches } from "@/app/actions/matches";
+import { format } from "date-fns";
+import { Suspense } from "react";
 
-// Helper function to parse date from URL parameter
-function parseDate(dateStr: string | null): Date | undefined {
-    if (!dateStr) return undefined
-    try {
-        return parse(dateStr, "yyyy-MM-dd", new Date())
-    } catch (e) {
-        return undefined
-    }
-}
-
-// Helper function to parse comma-separated list from URL parameter
-function parseCommaSeparatedList(param: string | string[] | undefined, defaultValue: string[]): string[] {
-    if (!param) return defaultValue
-
-    // If it's a string, split by comma; if it's an array, use the first item and split it
-    const valueStr = Array.isArray(param) ? param[0] : param
-    return valueStr.split(",").filter(Boolean)
-}
-
-function formatDateToYYYYMMDD(date: Date | undefined): string {
-    if (!date) {
-        return ""
-    }
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const day = String(date.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
-}
-
-// This is a server component that reads from URL parameters
-export default async function MapViewerPage({
+async function HeatmapPage({
     searchParams,
 }: {
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+    searchParams: Promise<{ [key: string]: string | undefined }>
 }) {
     const params = await searchParams
-    // Extract parameters with defaults
-    const selectedMap = (params[PARAM_NAMES.MAP] as string) || DEFAULT_VALUES.MAP
+    const map = params[PARAM_NAMES.MAP] || DEFAULT_MAP_OPTION
+    const fromDate = params[PARAM_NAMES.FROM_DATE] || DEFAULT_DATE_RANGE.from
+    const toDate = params[PARAM_NAMES.TO_DATE] || DEFAULT_DATE_RANGE.to
+    const matchTypes = params[PARAM_NAMES.MATCH_TYPES]?.split(',') || DEFAULT_TYPE_OPTION
+    let limit = DEFAULT_LIMIT
 
-    // Parse dates from URL parameters
-    const fromDate = parseDate(params[PARAM_NAMES.FROM_DATE] as string | null)
-    const toDate = parseDate(params[PARAM_NAMES.TO_DATE] as string | null)
-
-    // Create date range object if we have dates
-    const dateRange = fromDate
-        ? {
-            from: fromDate,
-            to: toDate,
-        }
-        : undefined
-
-    // Parse match types from comma-separated list
-    const matchTypes = parseCommaSeparatedList(params[PARAM_NAMES.MATCH_TYPES], DEFAULT_VALUES.MATCH_TYPES)
-
-    // Parse phases from comma-separated list
-    const selectedPhases = parseCommaSeparatedList(params[PARAM_NAMES.PHASES], DEFAULT_VALUES.PHASES)
-
-    // Get selected style
-    const selectedStyle = (params[PARAM_NAMES.STYLE] as string) || DEFAULT_VALUES.STYLE
-
-    const result = await getFilteredMatches({
-        mapName: selectedMap,
+    if (!isNaN(Number(params[PARAM_NAMES.LIMIT]))) {
+        limit = Number(params[PARAM_NAMES.LIMIT])
+    }
+    const filterParams: FilteredMatchesParams = {
+        mapName: map,
         matchTypes: matchTypes,
-        from: formatDateToYYYYMMDD(fromDate),
-        to: formatDateToYYYYMMDD(toDate),
-        limit: 100000
-    });
+        from: format(fromDate, "yyyy-MM-dd"),
+        to: format(toDate, "yyyy-MM-dd"),
+        limit: limit
+    }
+    const result = await getFilteredMatches(filterParams);
     if (result.error) {
         return <div>{result.error}</div>
     }
@@ -82,33 +37,10 @@ export default async function MapViewerPage({
     }
 
     return (
-        <div className="flex h-screen overflow-hidden bg-black">
-            {/* Main Content - prevent scrolling and remove padding/margin */}
-            <div className="flex-1 flex items-center justify-center p-0 m-0 overflow-hidden">
-                <Suspense fallback={<div className="p-8 text-center text-white">Loading map...</div>}>
-                    <MapCanvas selectedMap={selectedMap} selectedStyle={selectedStyle} selectedPhases={selectedPhases} matches={result.data.matches} />
-                </Suspense>
-            </div>
-
-            {/* Sidebar - allow scrolling only within sidebar */}
-            <div className="w-64 border-l bg-background flex flex-col h-screen">
-                <div className="p-4 border-b">
-                    <h2 className="text-lg font-semibold">Map Viewer</h2>
-                    <p className="text-sm text-muted-foreground">Matches Found: {result.data.count}</p>
-                </div>
-
-                <div className="flex-1 overflow-y-auto p-4">
-                    <Suspense>
-                        <MapControlsWrapper
-                            initialMap={selectedMap}
-                            initialDateRange={dateRange}
-                            initialMatchTypes={matchTypes}
-                            initialStyle={selectedStyle}
-                            initialPhases={selectedPhases}
-                        />
-                    </Suspense>
-                </div>
-            </div>
-        </div>
+        <Suspense fallback={<div>Loading heatmap...</div>}>
+            <HeatmapWrapper map={map} matchesResponse={result.data} filterParams={filterParams} />
+        </Suspense>
     )
 }
+
+export default HeatmapPage;

@@ -79,33 +79,35 @@ export default async function UnplayableMapPage({
     const imgURL = await getUnplayableMapImage(selectedMap, fromDate, toDate, threshold, overlayColor, overlayOpacity);
 
     return (
-        <div className="flex h-[calc(100vh-3.5rem)] overflow-hidden bg-black">
-            {/* Main Content - prevent scrolling and remove padding/margin */}
-            <div className="flex-1 flex items-center justify-center p-0 m-0 overflow-hidden">
-                <Suspense fallback={<MapLoading />}>
-                    <ClientImageWrapper src={imgURL} alt={""} width={800} height={800} />
-                </Suspense>
-            </div>
-
-            {/* Sidebar - allow scrolling only within sidebar */}
-            <div className="w-80 border-l bg-background flex flex-col h-full">
-                <div className="p-4 border-b">
-                    <h2 className="text-lg font-semibold">Unplayable Map Viewer</h2>
-                    <p className="text-sm text-muted-foreground">View and analyze unplayable map areas</p>
-                </div>
-
-                <div className="flex-1 overflow-y-auto p-4">
-                    <Suspense>
-                        <UnplayableMapControls
-                            initialMap={selectedMap}
-                            initialDateRange={dateRange}
-                            initialThreshold={threshold}
-                            initialOverlayColor={overlayColor}
-                            initialOverlayOpacity={overlayOpacity}
-                        />
+        <Suspense fallback={<MapLoading />}>
+            <div className="flex h-[calc(100vh-3.5rem)] overflow-hidden bg-black">
+                {/* Main Content - prevent scrolling and remove padding/margin */}
+                <div className="flex-1 flex items-center justify-center p-0 m-0 overflow-hidden">
+                    <Suspense fallback={<MapLoading />}>
+                        <ClientImageWrapper src={imgURL} alt={""} width={800} height={800} />
                     </Suspense>
                 </div>
+
+                {/* Sidebar - allow scrolling only within sidebar */}
+                <div className="w-80 border-l bg-background flex flex-col h-full">
+                    <div className="p-4 border-b">
+                        <h2 className="text-lg font-semibold">Unplayable Map Viewer</h2>
+                        <p className="text-sm text-muted-foreground">View and analyze unplayable map areas</p>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto p-4">
+                        <Suspense>
+                            <UnplayableMapControls
+                                initialMap={selectedMap}
+                                initialDateRange={dateRange}
+                                initialThreshold={threshold}
+                                initialOverlayColor={overlayColor}
+                                initialOverlayOpacity={overlayOpacity}
+                            />
+                        </Suspense>
+                    </div>
+                </div>
             </div>
-        </div>
+        </Suspense>
     )
 }

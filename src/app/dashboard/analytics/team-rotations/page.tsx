@@ -1,22 +1,15 @@
+// page.tsx for "/dashboard/analytics/team-rotations"
 import { getRotation, getTeamRotations, getTeams, TeamRotation, TeamRotationTiny } from "@/app/actions/teams";
 import { Suspense } from "react";
-import TeamRotationsCanvas from "./team-rotation-canvas";
-import RotationControls from "./rotation-controls";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { DynamicIcon } from 'lucide-react/dynamic';
-import { Icon, Terminal, Trees } from "lucide-react";
-import { cactus } from "@lucide/lab";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import TeamRotationWrapper from "./team-rotation-wrapper";
-import { start } from "repl";
 import { DEFAULT_DATES } from "./constants";
 
 export default async function RotationsPage({
     searchParams,
 }: {
-    searchParams: Promise<{ [key: string]: string | undefined }>
+    searchParams: { [key: string]: string | undefined }
 }) {
-    const { teamID, rotationID, startDate, endDate } = await searchParams
+    const { teamID, rotationID, startDate, endDate } = searchParams
     const { success, data: teams, error } = await getTeams()
 
     if (!teams) {
@@ -33,7 +26,6 @@ export default async function RotationsPage({
     if (endDate) {
         end = new Date(endDate)
     }
-
 
     let rotationData: TeamRotationTiny[] = []
     if (teamID) {
@@ -53,6 +45,14 @@ export default async function RotationsPage({
     }
 
     return (
-        <TeamRotationWrapper teamID={teamID} rotations={rotationData} rotation={rotation} teams={teams} />
+        // Make sure TeamRotationWrapper is wrapped in a Suspense boundary
+        <Suspense fallback={<div>Loading team rotation data...</div>}>
+            <TeamRotationWrapper
+                teamID={teamID}
+                rotations={rotationData}
+                rotation={rotation}
+                teams={teams}
+            />
+        </Suspense>
     )
 }

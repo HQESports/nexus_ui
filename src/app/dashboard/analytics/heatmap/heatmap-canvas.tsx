@@ -1,5 +1,5 @@
 import { Circle } from "react-konva";
-import BaseCanvas from "../../scratch/base-canvas";
+import BaseCanvas from "../../../../components/base-canvas";
 import { FilteredMatchesResponse } from "@/app/actions/matches";
 import { DEFAULT_CANVAS_SIZE, PHASE_COLORS, PUBG_MAP_SCALE } from "@/lib/constants";
 

@@ -1,8 +1,8 @@
 import { DEFAULT_DATE_RANGE, DEFAULT_LIMIT, DEFAULT_MAP_OPTION, DEFAULT_TYPE_OPTION, PARAM_NAMES } from "@/lib/constants";
 import HeatmapWrapper from "./heatmap-wrapper";
-import { DEFAULT_VALUES } from "../heatmap/constants";
 import { FilteredMatchesParams, getFilteredMatches } from "@/app/actions/matches";
 import { format } from "date-fns";
+import { Suspense } from "react";
 
 export default async function HeatmapPage({
     searchParams,
@@ -36,8 +36,8 @@ export default async function HeatmapPage({
     }
 
     return (
-        <div className="overflow-hidden">
+        <Suspense>
             <HeatmapWrapper map={map} matchesResponse={result.data} filterParams={filterParams} />
-        </div>
+        </Suspense>
     )
 }
