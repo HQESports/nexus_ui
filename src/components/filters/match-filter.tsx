@@ -15,7 +15,7 @@ import { Badge } from "../ui/badge";
 import { FilteredMatchesParams } from "@/app/actions/matches";
 
 interface MatchFilterProps {
-    count: number;
+    count: number | undefined;
     filterParams: FilteredMatchesParams
 }
 
@@ -90,10 +90,13 @@ export default function MatchFilter({ filterParams, count }: MatchFilterProps) {
             <SidebarGroup className="border-b-2">
                 <SidebarGroupContent className="space-y-3">
                     <div className="text-lg w-full text-center text-primary font-bold">Match Filters</div>
-                    <div className="flex items-center justify-between">
-                        <Label>Matches Found</Label>
-                        {limit == count ? <Badge className="bg-yellow-400">{count}/{limit}</Badge> : <Badge className="bg-green-400">{count}/{limit}</Badge>}
-                    </div>
+                    {
+                        count &&
+                        <div className="flex items-center justify-between">
+                            <Label>Matches Found</Label>
+                            {limit == count ? <Badge className="bg-yellow-400">{count}/{limit}</Badge> : <Badge className="bg-green-400">{count}/{limit}</Badge>}
+                        </div>
+                    }
                     {/* Map filter */}
                     <Label>Map Selection</Label>
                     <Select onValueChange={handleMapChange} disabled={isLoading} value={selectedMap}>
