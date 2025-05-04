@@ -138,7 +138,7 @@ export default function IGLSimWrapper({ filterParams, match, map }: IGLSimWrappe
                                     <PlaneIcon className="h-4 w-4" />
                                 </Button>
                                 <Button
-                                    variant={togglePlanePath ? "default" : "outline"}
+                                    variant={toggleCanvasCircle ? "default" : "outline"}
                                     onClick={() => setToggleCanvasCircle(!toggleCanvasCircle)}
                                     size="icon"
                                     aria-label="Toggle Plane Path"
@@ -146,7 +146,7 @@ export default function IGLSimWrapper({ filterParams, match, map }: IGLSimWrappe
                                     <Circle className="h-4 w-4" />
                                 </Button>
                                 <Button
-                                    variant={togglePlanePath ? "default" : "outline"}
+                                    variant={toggleDashCircled ? "default" : "outline"}
                                     onClick={() => setToggleDashCircled(!toggleDashCircled)}
                                     size="icon"
                                     aria-label="Toggle Plane Path"
