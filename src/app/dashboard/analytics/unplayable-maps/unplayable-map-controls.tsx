@@ -103,7 +103,7 @@ export function UnplayableMapControls({
         setIsNavigating(true)
 
         // Update the URL without refreshing the page
-        router.push(`/analytics/unplayable-maps?${params.toString()}`, { scroll: false })
+        router.push(`?${params.toString()}`, { scroll: false })
 
         // Reset dirty state
         setIsDirty(false)
