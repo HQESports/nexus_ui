@@ -43,7 +43,6 @@ export function JobSelector({ jobTypes }: JobSelectorProps) {
             if (result.success) {
                 // You can use toast notifications if you have them set up
                 toast?.success("Created");
-                console.log("Job started successfully with ID:", result.data?.id);
             } else {
                 toast?.error(result.error);
                 console.error("Failed to start job:", result.error);

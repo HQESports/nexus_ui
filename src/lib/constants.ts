@@ -88,3 +88,55 @@ export const PHASE_COLORS: Record<number, string> = {
 export const DEFAULT_CANVAS_SIZE = 600
 export const PUBG_MAP_SIZE = 816000
 export const PUBG_MAP_SCALE = DEFAULT_CANVAS_SIZE / PUBG_MAP_SIZE
+
+export enum AnalyzeModes {
+    None = "none",
+    Reducer = "Reducer",
+    Cluster = "Cluster",
+}
+
+export const DEFAULT_ANALYZE_MODE = AnalyzeModes.None
+
+export const zoneRadius: { [phase: string]: number } = {
+    1: 202901.53125,
+    2: 111595.84375,
+    3: 66957.5078125,
+    4: 40174.5078125,
+    5: 26113.4296875,
+    6: 16973.728515625,
+    7: 11032.9228515625,
+    8: 7723.0458984375
+};
+
+export const zoneRadiusScaled: { [phase: string]: number } = {
+    1: 202901.53125 * PUBG_MAP_SCALE,
+    2: 111595.84375 * PUBG_MAP_SCALE,
+    3: 66957.5078125 * PUBG_MAP_SCALE,
+    4: 40174.5078125 * PUBG_MAP_SCALE,
+    5: 26113.4296875 * PUBG_MAP_SCALE,
+    6: 16973.728515625 * PUBG_MAP_SCALE,
+    7: 11032.9228515625 * PUBG_MAP_SCALE,
+    8: 7723.0458984375 * PUBG_MAP_SCALE
+};
+
+// Conversion factor: 1 unit in PUBG map equals 1 cm in real-world scale
+export const PUBG_UNIT_TO_METERS = 0.01;
+
+// Function to convert PUBG map units to meters
+export function convertUnitsToMeters(units: number): number {
+    return Math.round(units * PUBG_UNIT_TO_METERS);
+}
+
+// Example: Convert the full map size to meters
+export const PUBG_MAP_SIZE_METERS = convertUnitsToMeters(PUBG_MAP_SIZE);
+
+export const ZONES = ["1", "2", "3", "4", "5", "6", "7", "8"]
+
+export const DEFAULT_ANALYZE_MODE_CIRCLE = "1"
+
+export const DEFAULT_CLUSTER_RADIUS = 30
+
+export const MIN_ZOOM = 1
+export const MAZ_ZOOM = 25
+
+export const TRASHCAN_SVG_URL = "./trash-2.svg"

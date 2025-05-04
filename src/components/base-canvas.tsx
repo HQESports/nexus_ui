@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Stage, Layer, Rect, Circle, Text, Image } from 'react-konva';
+import { Stage, Layer, Rect, Circle, Text, Image, Group } from 'react-konva';
 import type { KonvaEventObject } from 'konva/lib/Node';
 import { Vector2d } from 'konva/lib/types';
 import { MAP_IMAGES } from '@/lib/constants';
@@ -18,6 +18,7 @@ interface BaseCanvasProps {
   maxZoom: number;
   canvasSize: number;
   children: React.ReactNode;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
 }
 
 export default function BaseCanvas({
@@ -26,6 +27,7 @@ export default function BaseCanvas({
   maxZoom,
   canvasSize,
   children,
+  onKeyDown,
 }: BaseCanvasProps) {
   // Constants for min/max zoom
   const MIN_ZOOM = minZoom;  // Minimum zoom is 1x (no zooming out)
@@ -155,6 +157,7 @@ export default function BaseCanvas({
         onMouseLeave={handleDragEnd}
         ref={stageRef}
         style={{ border: '1px solid black' }}
+        onKeyDown={onKeyDown}
       >
         <Layer>
           {/* Background image */}
@@ -167,27 +170,12 @@ export default function BaseCanvas({
               height={CANVAS_SIZE}
             />
           )}
-          {children}
-          <Circle
-            x={CANVAS_SIZE / 2}
-            y={CANVAS_SIZE / 2}
-            radius={100}
-            fill="transparent"
-            stroke="black"
-            dash={[10, 5]}
-            strokeWidth={4}
-            opacity={1}
-            zIndex={1000}
-            draggable={true}
-            dragBoundFunc={(pos) => {
-              const constrainedPos = constrainPosition(pos, scale);
-              return constrainedPos;
-            }
-            }
-          />
+          <Group>
+            {children}
+          </Group>
 
         </Layer>
       </Stage>
-    </div>
+    </div >
   );
 };

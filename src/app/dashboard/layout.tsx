@@ -18,7 +18,6 @@ export default function Layout({
       <div className="flex w-full h-screen">
         <AppSidebar />
         <main className="flex flex-col flex-1 w-full">
-          <Navbar />
           <div className="flex-1 h-[calc(100vh-64px)]">
             {children}
 

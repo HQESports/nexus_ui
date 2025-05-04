@@ -7,11 +7,13 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
+import ModeToggle from "@/components/ui/mode-togle"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar"
+import { Slider } from "@/components/ui/slider"
 import { THERMAL_GRADIENTS } from "@/lib/color-schemes"
-import { DEFAULT_PHASES, DEFAULT_STYLE, PHASE_OPTIONS, STYLE_OPTIONS } from "@/lib/constants"
+import { AnalyzeModes, convertUnitsToMeters, DEFAULT_ANALYZE_MODE, DEFAULT_ANALYZE_MODE_CIRCLE, DEFAULT_CLUSTER_RADIUS, DEFAULT_PHASES, DEFAULT_STYLE, PHASE_OPTIONS, PUBG_MAP_SCALE, STYLE_OPTIONS, zoneRadius, ZONES } from "@/lib/constants"
 import { ChevronsUpDown, Circle } from "lucide-react"
 import dynamic from "next/dynamic"
 import { useState } from "react"
@@ -43,6 +45,9 @@ export default function HeatmapWrapper({ filterParams, matchesResponse, map }: H
     const [selectedPhases, setSelectedPhases] = useState<number[]>(DEFAULT_PHASES)
     const [selectedStyle, setSelectedStyle] = useState<string>(DEFAULT_STYLE)
     const [selectedGradient, setSelectedGradient] = useState<Record<number, string>>(THERMAL_GRADIENTS["DEFAULT"])
+    const [mode, setMode] = useState<AnalyzeModes>(DEFAULT_ANALYZE_MODE)
+    const [modeCircle, setModeCircle] = useState<string>(DEFAULT_ANALYZE_MODE_CIRCLE)
+    const [clusterRadius, setClusterRadius] = useState<number>(DEFAULT_CLUSTER_RADIUS)
 
     const handlePhaseChange = (phaseId: number, checked: boolean) => {
         if (checked) {
@@ -57,12 +62,20 @@ export default function HeatmapWrapper({ filterParams, matchesResponse, map }: H
         setSelectedGradient(gradient)
     }
 
+    const onModeChange = (mode: AnalyzeModes) => {
+        setMode(mode)
+    }
+
+    const onCircleModeSelect = (modeCircle: string) => {
+        setModeCircle(modeCircle)
+    }
+
     return (
         <SidebarProvider>
             <div className="flex w-full h-[calc(100vh-64px)] overflow-hidden">
                 <div className="flex-1 flex items-center justify-center">
                     <div className="min-w-[600px] flex items-center justify-center">
-                        <HeatmapCanvas map={map} filterMatches={matchesResponse} selectedPhases={selectedPhases} selectedStyle={selectedStyle} gradient={selectedGradient} />
+                        <HeatmapCanvas clusterRadius={clusterRadius} modeCircle={modeCircle} mode={mode} map={map} matches={matchesResponse} selectedPhases={selectedPhases} selectedStyle={selectedStyle} gradient={selectedGradient} />
                     </div>
                 </div>
                 <Sidebar side="right" className="border-l">
@@ -73,7 +86,7 @@ export default function HeatmapWrapper({ filterParams, matchesResponse, map }: H
                     </SidebarHeader>
                     <SidebarContent>
                         <MatchFilter filterParams={filterParams} count={matchesResponse.count} />
-                        <SidebarGroup className="space-y-2">
+                        <SidebarGroup className="space-y-2 border-b-2">
 
                             {/* Phase selectors */}
                             <div className="text-lg w-full text-center text-primary font-bold">Phase Controls</div>
@@ -145,6 +158,39 @@ export default function HeatmapWrapper({ filterParams, matchesResponse, map }: H
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
+                        </SidebarGroup>
+                        {/* Analysis Modes */}
+                        <SidebarGroup className="space-y-2">
+                            <div className="text-lg w-full text-center text-primary font-bold">Analysis Controls</div>
+                            <Label>Mode</Label>
+                            <ModeToggle onModeChange={onModeChange} />
+                            <Label>Circle Size</Label>
+                            <Select onValueChange={onCircleModeSelect} value={modeCircle}>
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select an analysis circle size" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        {ZONES.map((zone) => (
+                                            <SelectItem key={zone} value={zone}>
+                                                Phase {zone}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                            {mode === AnalyzeModes.Cluster &&
+                                <div className="space-y-2">
+                                    <Label>Cluster Radius {convertUnitsToMeters(clusterRadius / PUBG_MAP_SCALE)}m</Label>
+                                    <Slider
+                                        value={[clusterRadius]}
+                                        onValueChange={(value) => setClusterRadius(value[0])}
+                                        min={1}
+                                        max={100}
+                                        step={1}
+                                    />
+                                </div>
+                            }
                         </SidebarGroup>
                     </SidebarContent>
                 </Sidebar>

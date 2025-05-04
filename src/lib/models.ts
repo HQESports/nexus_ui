@@ -13,3 +13,11 @@ export interface Team {
     searchCount: 2 | 3 | 4
     players: Player[]
 }
+
+export interface SimpleCircle {
+    x: number;
+    y: number;
+    radius: number;
+    trash: boolean;
+    phase: number;
+}
