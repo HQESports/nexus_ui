@@ -13,6 +13,7 @@ import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Badge } from "../ui/badge";
 import { FilteredMatchesParams } from "@/app/actions/matches";
+import { cn } from "@/lib/utils";
 
 interface MatchFilterProps {
     count: number | undefined;
@@ -119,17 +120,20 @@ export default function MatchFilter({ filterParams, count, useLimit = true, butt
 
                     {/* Match Type Filter */}
                     <Label>Select Match Type</Label>
-                    <ToggleGroup type="multiple" className="w-full" variant="outline" value={matchTypes} onValueChange={handleTypeChange} >
-                        {MATCH_TYPE_OPTIONS.map((option) => (
-                            <ToggleGroupItem
-                                key={option.id}
-                                value={option.id}
-                                className="w-full hover:bg-transparent"
-                            >
-                                {option.label}
-                            </ToggleGroupItem>
-                        ))}
-                    </ToggleGroup>
+
+                    <div className="w-full flex items-center justify-between">
+                        {MATCH_TYPE_OPTIONS.map((option) => {
+                            return (
+                                <Button
+                                    key={option.id}
+                                    variant={matchTypes.includes(option.id) ? "default" : "outline"}
+                                    onClick={() => handleTypeChange(matchTypes.includes(option.id) ? matchTypes.filter((type) => type !== option.id) : [...matchTypes, option.id])}
+                                >
+                                    {option.label}
+                                </Button>
+                            )
+                        })}
+                    </div>
 
                     {/* Date Range Selector */}
                     <Label>Date Range</Label>
