@@ -1,11 +1,11 @@
 "use client";
 import { Circle, Group } from "react-konva";
 import { FilteredMatchesResponse } from "@/app/actions/matches";
-import { AnalyzeModes, DEFAULT_ANALYZE_MODE, DEFAULT_CANVAS_SIZE, PHASE_COLORS, PUBG_MAP_SCALE, zoneRadiusScaled } from "@/lib/constants";
+import { AnalyzeModes, DEFAULT_ANALYZE_MODE, DEFAULT_CANVAS_SIZE, MAZ_ZOOM, MIN_ZOOM, PHASE_COLORS, PUBG_MAP_SCALE, zoneRadiusScaled } from "@/lib/constants";
 import BaseCanvas from "@/components/base-canvas";
 import { Vector2d } from "konva/lib/types";
 import { useState } from "react";
-import { calculateDistance } from "@/lib/utils";
+import { boundingFunctionCircle, calculateDistance } from "@/lib/utils";
 
 interface HeatmapCanvasProps {
     matches: FilteredMatchesResponse
@@ -87,7 +87,7 @@ export default function HeatmapCanvas({ clusterRadius, modeCircle, mode, matches
 
     const modeRadius = zoneRadiusScaled[modeCircle]
     return (
-        <BaseCanvas mapName={map} minZoom={1} maxZoom={25} canvasSize={DEFAULT_CANVAS_SIZE}  >
+        <BaseCanvas mapName={map} minZoom={MIN_ZOOM} maxZoom={MAZ_ZOOM} canvasSize={DEFAULT_CANVAS_SIZE}  >
 
             <Group>
                 {filteredMatches.map((match, index) => {
@@ -139,21 +139,8 @@ export default function HeatmapCanvas({ clusterRadius, modeCircle, mode, matches
                         onDragMove={(pos) => { }}
                         draggable
                         dragBoundFunc={(pos: Vector2d) => {
-                            const minX = modeRadius;
-                            const maxX = DEFAULT_CANVAS_SIZE - modeRadius;
-                            const minY = modeRadius;
-                            const maxY = DEFAULT_CANVAS_SIZE - modeRadius;
-
-                            const x = Math.max(minX, Math.min(maxX, pos.x))
-                            const y = Math.max(minY, Math.min(maxY, pos.y))
-
-                            const newPos = {
-                                x: x,
-                                y: y,
-                            }
-
+                            const newPos = boundingFunctionCircle(pos, modeRadius, DEFAULT_CANVAS_SIZE)
                             setCirclePos(newPos)
-
                             return newPos
                         }}
                     />}

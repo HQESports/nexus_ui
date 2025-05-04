@@ -17,9 +17,11 @@ import { FilteredMatchesParams } from "@/app/actions/matches";
 interface MatchFilterProps {
     count: number | undefined;
     filterParams: FilteredMatchesParams
+    useLimit?: boolean;
+    buttonStr?: string;
 }
 
-export default function MatchFilter({ filterParams, count }: MatchFilterProps) {
+export default function MatchFilter({ filterParams, count, useLimit = true, buttonStr = "Filter Matches" }: MatchFilterProps) {
     const searchParams = useSearchParams();
     const router = useRouter();
     // State variables
@@ -52,7 +54,10 @@ export default function MatchFilter({ filterParams, count }: MatchFilterProps) {
         params.set(PARAM_NAMES.FROM_DATE, format(fromDate, "yyyy-MM-dd"));
         params.set(PARAM_NAMES.TO_DATE, format(toDate, "yyyy-MM-dd"));
         params.set(PARAM_NAMES.MATCH_TYPES, matchTypes.join(","));
-        params.set(PARAM_NAMES.LIMIT, limit.toString());
+
+        if (useLimit) {
+            params.set(PARAM_NAMES.LIMIT, limit.toString());
+        }
 
         router.push(`?${params.toString()}`, { scroll: false })
     }
@@ -136,9 +141,13 @@ export default function MatchFilter({ filterParams, count }: MatchFilterProps) {
                         locale="en-GB"
                         showCompare={false}
                     />
-                    <Label>Matches Limit</Label>
-                    <Input type="number" placeholder="Limit" className="w-full" value={limit} onChange={handleLimitChange} />
-                    <Button className="w-full mb-2" onClick={() => setParams()}>Filter Matches</Button>
+                    {useLimit &&
+                        <>
+                            <Label>Matches Limit</Label>
+                            <Input type="number" placeholder="Limit" className="w-full" value={limit} onChange={handleLimitChange} />
+                        </>
+                    }
+                    <Button className="w-full mb-2" onClick={() => setParams()}>{buttonStr}</Button>
                 </SidebarGroupContent>
             </SidebarGroup >
         </Suspense>

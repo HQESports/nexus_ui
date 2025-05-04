@@ -1,8 +1,9 @@
 // In your HeatmapPage component
 import { DEFAULT_DATE_RANGE, DEFAULT_LIMIT, DEFAULT_MAP_OPTION, DEFAULT_TYPE_OPTION, PARAM_NAMES } from "@/lib/constants";
-import { FilteredMatchesParams, getFilteredMatches } from "@/app/actions/matches";
+import { FilteredMatchesParams, getFilteredMatches, getFilteredRandomMatch } from "@/app/actions/matches";
 import { format } from "date-fns";
 import { Suspense } from "react";
+import IGLSimWrapper from "./igl-sim-wrapper";
 
 async function IGLSimPage({
     searchParams,
@@ -14,19 +15,14 @@ async function IGLSimPage({
     const fromDate = params[PARAM_NAMES.FROM_DATE] || DEFAULT_DATE_RANGE.from
     const toDate = params[PARAM_NAMES.TO_DATE] || DEFAULT_DATE_RANGE.to
     const matchTypes = params[PARAM_NAMES.MATCH_TYPES]?.split(',') || DEFAULT_TYPE_OPTION
-    let limit = DEFAULT_LIMIT
 
-    if (!isNaN(Number(params[PARAM_NAMES.LIMIT]))) {
-        limit = Number(params[PARAM_NAMES.LIMIT])
-    }
     const filterParams: FilteredMatchesParams = {
         mapName: map,
         matchTypes: matchTypes,
         from: format(fromDate, "yyyy-MM-dd"),
         to: format(toDate, "yyyy-MM-dd"),
-        limit: limit
     }
-    const result = await getFilteredMatches(filterParams);
+    const result = await getFilteredRandomMatch(filterParams);
     if (result.error) {
         return <div>{result.error}</div>
     }
@@ -37,7 +33,7 @@ async function IGLSimPage({
 
     return (
         <Suspense fallback={<div>Loading heatmap...</div>}>
-
+            <IGLSimWrapper filterParams={filterParams} match={result.data.matches} map={map} />
         </Suspense>
     )
 }

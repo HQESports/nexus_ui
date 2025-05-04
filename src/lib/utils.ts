@@ -2,6 +2,8 @@ import { TeamRequest, TeamResponse } from "@/app/actions/teams"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { Team } from "./models"
+import { PlanePath } from "@/app/actions/matches"
+import { Vector2d } from "konva/lib/types"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -255,4 +257,109 @@ export function calculateDistance(x1: number, y1: number, x2: number, y2: number
   const dx = x2 - x1;
   const dy = y2 - y1;
   return Math.sqrt(dx * dx + dy * dy);
+}
+
+/**
+ * Projects a line segment onto a sub-map of the original map, extending both ends.
+ * The sub-map is offset from the edges of the original map by mapSize / 16.
+ * 
+ * @param x1 The x-coordinate of the first point
+ * @param y1 The y-coordinate of the first point
+ * @param x2 The x-coordinate of the second point
+ * @param y2 The y-coordinate of the second point
+ * @param mapSize The size of the square map
+ * @param scaler Optional parameter to scale the final coordinates (default: 1)
+ * @returns An array containing the projected line's start and end points [newX1, newY1, newX2, newY2]
+ */
+export function projectLineOntoSubMap(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  mapSize: number,
+  scaler: number = 1
+): [number, number, number, number] {
+  // Calculate the offset from the edges of the map
+  const offset = mapSize / 16;
+
+  // Define the boundaries of the sub-map
+  const minX = offset;
+  const minY = offset;
+  const maxX = mapSize - offset;
+  const maxY = mapSize - offset;
+
+  // Calculate the direction vector of the line
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+
+  // Normalize the direction vector
+  const length = Math.sqrt(dx * dx + dy * dy);
+  const unitDx = dx / length;
+  const unitDy = dy / length;
+
+  // Extend the line in both directions
+  let startX = x1 - unitDx * mapSize;
+  let startY = y1 - unitDy * mapSize;
+  let endX = x2 + unitDx * mapSize;
+  let endY = y2 + unitDy * mapSize;
+
+  // Clamp the extended line to the sub-map boundaries
+  startX = Math.max(minX, Math.min(maxX, startX));
+  startY = Math.max(minY, Math.min(maxY, startY));
+  endX = Math.max(minX, Math.min(maxX, endX));
+  endY = Math.max(minY, Math.min(maxY, endY));
+
+  // Apply the scaler to the final coordinates
+  return [startX * scaler, startY * scaler, endX * scaler, endY * scaler];
+}
+
+export function projectPlanePath(planePath: PlanePath, mapSize: number, scaler: number = 1): [number, number, number, number] {
+  return projectLineOntoSubMap(planePath.StartX, planePath.StartY, planePath.EndX, planePath.EndY, mapSize, scaler);
+}
+
+export function boundingFunctionCircle(pos: Vector2d, radius: number, canvasSize: number): Vector2d {
+  const minX = radius;
+  const maxX = canvasSize - radius;
+  const minY = radius;
+  const maxY = canvasSize - radius;
+
+  const x = Math.max(minX, Math.min(maxX, pos.x))
+  const y = Math.max(minY, Math.min(maxY, pos.y))
+
+  const newPos = {
+    x: x,
+    y: y,
+  }
+  return newPos
+}
+
+/**
+ * Checks if a circle intersects with a square
+ * @param circleX The x-coordinate of the circle's center
+ * @param circleY The y-coordinate of the circle's center
+ * @param circleRadius The radius of the circle
+ * @param squareX The x-coordinate of the square's top-left corner
+ * @param squareY The y-coordinate of the square's top-left corner
+ * @param squareSize The length of the square's sides
+ * @returns true if the circle and square intersect, false otherwise
+ */
+export function isCircleIntersectingSquare(
+  circleX: number,
+  circleY: number,
+  circleRadius: number,
+  squareX: number,
+  squareY: number,
+  squareSize: number
+): boolean {
+  // Find the closest point on the square to the circle's center
+  const closestX = Math.max(squareX, Math.min(circleX, squareX + squareSize));
+  const closestY = Math.max(squareY, Math.min(circleY, squareY + squareSize));
+
+  // Calculate the distance between the circle's center and the closest point
+  const distanceX = circleX - closestX;
+  const distanceY = circleY - closestY;
+  const distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+
+  // If the distance is less than or equal to the circle's radius, they intersect
+  return distanceSquared <= (circleRadius * circleRadius);
 }

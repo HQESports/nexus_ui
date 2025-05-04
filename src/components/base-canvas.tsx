@@ -18,6 +18,7 @@ interface BaseCanvasProps {
   maxZoom: number;
   canvasSize: number;
   children: React.ReactNode;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
 }
 
 export default function BaseCanvas({
@@ -26,6 +27,7 @@ export default function BaseCanvas({
   maxZoom,
   canvasSize,
   children,
+  onKeyDown,
 }: BaseCanvasProps) {
   // Constants for min/max zoom
   const MIN_ZOOM = minZoom;  // Minimum zoom is 1x (no zooming out)
@@ -155,6 +157,7 @@ export default function BaseCanvas({
         onMouseLeave={handleDragEnd}
         ref={stageRef}
         style={{ border: '1px solid black' }}
+        onKeyDown={onKeyDown}
       >
         <Layer>
           {/* Background image */}
@@ -173,6 +176,6 @@ export default function BaseCanvas({
 
         </Layer>
       </Stage>
-    </div>
+    </div >
   );
 };

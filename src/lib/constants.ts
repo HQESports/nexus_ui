@@ -135,3 +135,8 @@ export const ZONES = ["1", "2", "3", "4", "5", "6", "7", "8"]
 export const DEFAULT_ANALYZE_MODE_CIRCLE = "1"
 
 export const DEFAULT_CLUSTER_RADIUS = 30
+
+export const MIN_ZOOM = 1
+export const MAZ_ZOOM = 25
+
+export const TRASHCAN_SVG_URL = "./trash-2.svg"

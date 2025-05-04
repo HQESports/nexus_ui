@@ -53,7 +53,7 @@ export interface FilteredMatchesResponse {
 }
 
 export interface FilteredMatchResponse {
-    match: Match;
+    matches: Match;
     filter: {
         mapName: string;
         matchTypes: string[];
