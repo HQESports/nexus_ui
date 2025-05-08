@@ -2,7 +2,7 @@
 
 import { Match } from "@/app/actions/matches";
 import BaseCanvas from "@/components/base-canvas";
-import { MIN_ZOOM, MAZ_ZOOM, DEFAULT_CANVAS_SIZE, PUBG_MAP_SCALE, PUBG_MAP_SIZE, zoneRadiusScaled } from "@/lib/constants";
+import { MIN_ZOOM, MAX_ZOOM, DEFAULT_CANVAS_SIZE, PUBG_MAP_SCALE, PUBG_MAP_SIZE, zoneRadiusScaled } from "@/lib/constants";
 import { SimpleCircle } from "@/lib/models";
 import { boundingFunctionCircle, calculateDistance, projectPlanePath } from "@/lib/utils";
 import { Vector2d } from "konva/lib/types";
@@ -47,7 +47,7 @@ export default function IGLSimCanvas({ match, map, curPhase, togglePlanePath, ci
             <BaseCanvas
                 mapName={map}
                 minZoom={MIN_ZOOM}
-                maxZoom={MAZ_ZOOM}
+                maxZoom={MAX_ZOOM}
                 canvasSize={DEFAULT_CANVAS_SIZE}
             >
                 <Group>

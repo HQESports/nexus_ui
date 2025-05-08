@@ -72,7 +72,7 @@ export default function HeatmapWrapper({ filterParams, matchesResponse, map }: H
 
     return (
         <SidebarProvider>
-            <div className="flex w-full h-[calc(100vh-64px)] overflow-hidden">
+            <div className="flex w-full overflow-hidden">
                 <div className="flex-1 flex items-center justify-center">
                     <div className="min-w-[600px] flex items-center justify-center">
                         <HeatmapCanvas clusterRadius={clusterRadius} modeCircle={modeCircle} mode={mode} map={map} matches={matchesResponse} selectedPhases={selectedPhases} selectedStyle={selectedStyle} gradient={selectedGradient} />

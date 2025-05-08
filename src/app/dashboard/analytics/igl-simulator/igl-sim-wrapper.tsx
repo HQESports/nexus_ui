@@ -6,11 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
-import { DEFAULT_CANVAS_SIZE, zoneRadiusScaled, ZONES } from "@/lib/constants";
+import { DEFAULT_CANVAS_SIZE, PARAM_NAMES, zoneRadiusScaled, ZONES } from "@/lib/constants";
 import { SimpleCircle } from "@/lib/models";
 import { ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, PlaneIcon, Trash2, Circle, CircleDashed } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const IGLSimCanvas = dynamic(() => import('./igl-sim-canvas'), { ssr: false })
 
@@ -26,6 +27,14 @@ export default function IGLSimWrapper({ filterParams, match, map }: IGLSimWrappe
     const [toggleCanvasCircle, setToggleCanvasCircle] = useState(true);
     const [toggleDashCircled, setToggleDashCircled] = useState(true);
     const [circles, setCircles] = useState<SimpleCircle[]>([]);
+
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const matchIdFromUrl = searchParams.get("matchId");
+
+    if (!matchIdFromUrl) {
+        router.push(`?${PARAM_NAMES.MATCH_ID}=${match.MatchID}`);
+    }
 
     const step = (direction: "start" | "backward" | "forward" | "end") => {
         switch (direction) {

@@ -100,7 +100,7 @@ export default function MatchFilter({ filterParams, count, useLimit = true, butt
                         count &&
                         <div className="flex items-center justify-between">
                             <Label>Matches Found</Label>
-                            {limit == count ? <Badge className="bg-yellow-400">{count}/{limit}</Badge> : <Badge className="bg-green-400">{count}/{limit}</Badge>}
+                            {filterParams.limit == count ? <Badge className="bg-yellow-400">{count}/{filterParams.limit}</Badge> : <Badge className="bg-green-400">{count}/{filterParams.limit}</Badge>}
                         </div>
                     }
                     {/* Map filter */}

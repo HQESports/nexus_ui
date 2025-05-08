@@ -126,6 +126,29 @@ export async function getFilteredMatches(params: FilteredMatchesParams): Promise
     }
 }
 
+export async function getMatchById(matchId: string): Promise<ActionReturn<FilteredMatchResponse>> {
+    try {
+        const apiClient = getServerApiClient();
+
+        const response = await apiClient.get<FilteredMatchResponse>(`/api/pubg/matches/${matchId}`);
+
+        return {
+            success: true,
+            data: response.data,
+            error: undefined
+        };
+    }
+    catch (error) {
+        console.error('Failed to fetch match by ID:', error);
+
+        return {
+            success: false,
+            data: undefined,
+            error: error instanceof Error ? error.message : 'An unknown error occurred',
+        };
+    }
+}
+
 /**
  * Fetches matches filtered by various criteria
  * @param params Filter parameters

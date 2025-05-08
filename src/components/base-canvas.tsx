@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Stage, Layer, Rect, Circle, Text, Image, Group } from 'react-konva';
 import type { KonvaEventObject } from 'konva/lib/Node';
 import { Vector2d } from 'konva/lib/types';
-import { MAP_IMAGES } from '@/lib/constants';
+import { DEFAULT_CANVAS_SIZE, MAP_IMAGES, MIN_ZOOM, MAX_ZOOM } from '@/lib/constants';
 
 // Define types
 interface Position {
@@ -23,9 +23,9 @@ interface BaseCanvasProps {
 
 export default function BaseCanvas({
   mapName,
-  minZoom,
-  maxZoom,
-  canvasSize,
+  minZoom = MIN_ZOOM,
+  maxZoom = MAX_ZOOM,
+  canvasSize = DEFAULT_CANVAS_SIZE,
   children,
   onKeyDown,
 }: BaseCanvasProps) {

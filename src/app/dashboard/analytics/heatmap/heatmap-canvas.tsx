@@ -1,7 +1,7 @@
 "use client";
 import { Circle, Group } from "react-konva";
 import { FilteredMatchesResponse } from "@/app/actions/matches";
-import { AnalyzeModes, DEFAULT_ANALYZE_MODE, DEFAULT_CANVAS_SIZE, MAZ_ZOOM, MIN_ZOOM, PHASE_COLORS, PUBG_MAP_SCALE, zoneRadiusScaled } from "@/lib/constants";
+import { AnalyzeModes, DEFAULT_ANALYZE_MODE, DEFAULT_CANVAS_SIZE, MAX_ZOOM, MIN_ZOOM, PHASE_COLORS, PUBG_MAP_SCALE, zoneRadiusScaled } from "@/lib/constants";
 import BaseCanvas from "@/components/base-canvas";
 import { Vector2d } from "konva/lib/types";
 import { useState } from "react";
@@ -87,7 +87,7 @@ export default function HeatmapCanvas({ clusterRadius, modeCircle, mode, matches
 
     const modeRadius = zoneRadiusScaled[modeCircle]
     return (
-        <BaseCanvas mapName={map} minZoom={MIN_ZOOM} maxZoom={MAZ_ZOOM} canvasSize={DEFAULT_CANVAS_SIZE}  >
+        <BaseCanvas mapName={map} minZoom={MIN_ZOOM} maxZoom={MAX_ZOOM} canvasSize={DEFAULT_CANVAS_SIZE}  >
 
             <Group>
                 {filteredMatches.map((match, index) => {

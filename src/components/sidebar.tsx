@@ -16,7 +16,8 @@ import {
     Building,
     Users2,
     Sparkle,
-    SkullIcon
+    SkullIcon,
+    Trophy
 } from "lucide-react";
 
 import {
@@ -66,6 +67,16 @@ const navigation: NavGroup[] = [
                 title: "Teams",
                 href: "/dashboard/teams",
                 icon: Users2
+            },
+            {
+                title: "Players",
+                href: "/dashboard/players",
+                icon: Users,
+            },
+            {
+                title: "Tournaments",
+                href: "/dashboard/tournaments",
+                icon: Trophy,
             }
         ],
     },
@@ -116,11 +127,6 @@ const navigation: NavGroup[] = [
                 title: "Generator",
                 href: "/dashboard/dropmaps/generator",
                 icon: Layers,
-            },
-            {
-                title: "Logo Manager",
-                href: "/dashboard/dropmaps/logo-manager",
-                icon: Image,
             },
             {
                 title: "Spots Manager",

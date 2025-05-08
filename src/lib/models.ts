@@ -21,3 +21,11 @@ export interface SimpleCircle {
     trash: boolean;
     phase: number;
 }
+
+export interface DropspotLocation {
+    id: string | undefined;
+    map_name: string;
+    names: string[];
+    x: number;
+    y: number;
+}

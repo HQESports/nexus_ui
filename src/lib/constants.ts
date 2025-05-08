@@ -54,6 +54,7 @@ export const LIMIT_MAX = 10000
 export const LIMIT_MIN = 100
 
 export const PARAM_NAMES = {
+    MATCH_ID: "match_id",
     MAP: "map",
     FROM_DATE: "fromDate",
     TO_DATE: "toDate",
@@ -137,6 +138,10 @@ export const DEFAULT_ANALYZE_MODE_CIRCLE = "1"
 export const DEFAULT_CLUSTER_RADIUS = 30
 
 export const MIN_ZOOM = 1
-export const MAZ_ZOOM = 25
+export const MAX_ZOOM = 25
 
 export const TRASHCAN_SVG_URL = "./trash-2.svg"
+
+export const SPOT_RADIUS = 10
+export const SPOT_FONT_SIZE = 16
+export const SPOT_PADDING = 8
