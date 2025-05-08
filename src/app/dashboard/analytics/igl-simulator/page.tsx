@@ -4,7 +4,7 @@ import { ActionReturn, FilteredMatchesParams, FilteredMatchResponse, getFiltered
 import { format } from "date-fns";
 import { Suspense } from "react";
 import IGLSimWrapper from "./igl-sim-wrapper";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 async function IGLSimPage({
     searchParams,
@@ -32,20 +32,37 @@ async function IGLSimPage({
         }
 
         result = await getFilteredRandomMatch(filterParams)
+        const matchID = result.data?.matches.MatchID
+        if (matchID) {
+            redirect(`/dashboard/analytics/igl-simulator?${PARAM_NAMES.MATCH_ID}=${matchID}`)
+        }
     }
+
+
     if (result.error) {
         return <div>{result.error}</div>
     }
 
     if (!result.data?.matches) {
-        return <div>Womp Womp</div>
+        return <div>Match not found</div>
     }
 
+    const DEFAULT_FILTER: FilteredMatchesParams = {
+        mapName: DEFAULT_MAP_OPTION,
+        matchTypes: DEFAULT_TYPE_OPTION,
+        from: DEFAULT_DATE_RANGE.from.toString(),
+        to: DEFAULT_DATE_RANGE.to.toString(),
+        limit: DEFAULT_LIMIT,
+    }
 
+    let filter = DEFAULT_FILTER
+    if (result.data.filter) {
+        filter = result.data.filter
+    }
 
     return (
         <Suspense fallback={<div>Loading heatmap...</div>}>
-            <IGLSimWrapper filterParams={result.data.filter} match={result.data.matches} map={result.data.filter.mapName} />
+            <IGLSimWrapper filterParams={filter} match={result.data?.matches} />
         </Suspense>
     )
 }

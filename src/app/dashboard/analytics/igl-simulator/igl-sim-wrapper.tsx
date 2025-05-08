@@ -18,10 +18,10 @@ const IGLSimCanvas = dynamic(() => import('./igl-sim-canvas'), { ssr: false })
 interface IGLSimWrapperParams {
     match: Match
     filterParams: FilteredMatchesParams
-    map: string
 }
 
-export default function IGLSimWrapper({ filterParams, match, map }: IGLSimWrapperParams) {
+export default function IGLSimWrapper({ filterParams, match }: IGLSimWrapperParams) {
+    const map = match.MapName;
     const [curPhase, setCurPhase] = useState(match.TelemetryData.SafeZones[0].Phase);
     const [togglePlanePath, setTogglePlanePath] = useState(true);
     const [toggleCanvasCircle, setToggleCanvasCircle] = useState(true);
@@ -30,11 +30,6 @@ export default function IGLSimWrapper({ filterParams, match, map }: IGLSimWrappe
 
     const searchParams = useSearchParams();
     const router = useRouter();
-    const matchIdFromUrl = searchParams.get("matchId");
-
-    if (!matchIdFromUrl) {
-        router.push(`?${PARAM_NAMES.MATCH_ID}=${match.MatchID}`);
-    }
 
     const step = (direction: "start" | "backward" | "forward" | "end") => {
         switch (direction) {

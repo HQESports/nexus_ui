@@ -60,7 +60,7 @@ export interface FilteredMatchResponse {
         startDate: string | null;
         endDate: string | null;
         limit: number;
-    }
+    } | undefined
 }
 
 
@@ -130,11 +130,14 @@ export async function getMatchById(matchId: string): Promise<ActionReturn<Filter
     try {
         const apiClient = getServerApiClient();
 
-        const response = await apiClient.get<FilteredMatchResponse>(`/api/pubg/matches/${matchId}`);
+        const response = await apiClient.get<Match>(`/api/pubg/matches/${matchId}`);
 
         return {
             success: true,
-            data: response.data,
+            data: {
+                filter: undefined,
+                matches: response.data
+            },
             error: undefined
         };
     }
