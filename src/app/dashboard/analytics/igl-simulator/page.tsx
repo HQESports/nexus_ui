@@ -4,9 +4,7 @@ import { ActionReturn, FilteredMatchesParams, FilteredMatchResponse, getFiltered
 import { format } from "date-fns";
 import { Suspense } from "react";
 import IGLSimWrapper from "./igl-sim-wrapper";
-import { redirect, useRouter } from "next/navigation";
-import { m } from "framer-motion";
-
+import { redirect } from "next/navigation";
 async function IGLSimPage({
     searchParams,
 }: {
@@ -32,17 +30,6 @@ async function IGLSimPage({
         result = await getMatchById(match_id)
     } else {
         result = await getFilteredRandomMatch(filterParams)
-
-        const matchID = result.data?.matches.MatchID
-        let urlSearchParams = new URLSearchParams();
-        urlSearchParams.set(PARAM_NAMES.MAP, map);
-        urlSearchParams.set(PARAM_NAMES.FROM_DATE, format(fromDate, "yyyy-MM-dd"));
-        urlSearchParams.set(PARAM_NAMES.TO_DATE, format(toDate, "yyyy-MM-dd"));
-        urlSearchParams.set(PARAM_NAMES.MATCH_TYPES, matchTypes.join(","));
-        if (matchID) {
-            urlSearchParams.set(PARAM_NAMES.MATCH_ID, matchID);
-            redirect(`?${urlSearchParams.toString()}`)
-        }
     }
 
     if (result.error) {
@@ -51,6 +38,17 @@ async function IGLSimPage({
 
     if (!result.data?.matches) {
         return <div>Match not found</div>
+    }
+
+    if (!match_id) {
+        const matchID = result.data?.matches.MatchID
+        let urlSearchParams = new URLSearchParams();
+        urlSearchParams.set(PARAM_NAMES.MAP, map);
+        urlSearchParams.set(PARAM_NAMES.MATCH_TYPES, matchTypes.join(","));
+        if (matchID) {
+            urlSearchParams.set(PARAM_NAMES.MATCH_ID, matchID);
+            redirect(`?${urlSearchParams.toString()}`)
+        }
     }
 
     return (

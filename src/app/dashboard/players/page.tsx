@@ -11,7 +11,6 @@ export default async function PlayersPage() {
     if (!players) {
         return <div>Loading...</div>;
     }
-    console.log(players);
 
     return (
         <div className="container mx-auto py-10">

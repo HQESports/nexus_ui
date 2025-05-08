@@ -23,6 +23,7 @@ interface MatchFilterProps {
 }
 
 export default function MatchFilter({ filterParams, count, useLimit = true, buttonStr = "Filter Matches" }: MatchFilterProps) {
+    console.log("MatchFilter", filterParams)
     const searchParams = useSearchParams();
     const router = useRouter();
     // State variables
