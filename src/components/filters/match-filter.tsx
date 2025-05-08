@@ -51,6 +51,10 @@ export default function MatchFilter({ filterParams, count, useLimit = true, butt
             toDate = DEFAULT_DATE_RANGE.to
         }
 
+        if (params.get(PARAM_NAMES.MATCH_ID)) {
+            params.delete(PARAM_NAMES.MATCH_ID)
+        }
+
         params.set(PARAM_NAMES.MAP, selectedMap);
         params.set(PARAM_NAMES.FROM_DATE, format(fromDate, "yyyy-MM-dd"));
         params.set(PARAM_NAMES.TO_DATE, format(toDate, "yyyy-MM-dd"));

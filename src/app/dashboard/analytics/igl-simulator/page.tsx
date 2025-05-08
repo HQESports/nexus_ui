@@ -35,7 +35,7 @@ async function IGLSimPage({
         const matchID = result.data?.matches.MatchID
         if (matchID) {
             redirect(`/dashboard/analytics/igl-simulator?${PARAM_NAMES.MATCH_ID}=${matchID}`)
-        }
+    }
     }
 
 
