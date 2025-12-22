@@ -27,6 +27,9 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: true,
+  // Ensure Turbopack is explicitly configured (empty) so Next.js doesn't error
+  // when a custom webpack config is present. See Next.js 16 turbopack guidance.
+  turbopack: {},
   webpack: (config) => {
     // This is to handle the canvas module not found error
     config.externals = [...(config.externals || []), { canvas: "canvas" }];
