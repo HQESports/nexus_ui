@@ -18,6 +18,7 @@ export default function TeamRotationsCanvas({ rotation, styleOptions }: TeamRota
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const canvasWidth = 700
     const canvasHeight = 700
+    console.log("Rendering TeamRotationsCanvas with rotation:", rotation)
 
     // Maximum coordinate in the game space (0-816000)
     const MAX_GAME_COORDINATE = 816000
