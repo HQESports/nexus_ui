@@ -49,7 +49,7 @@ export default function TeamList({ teams }: { teams: TeamResponse[] }) {
 
                     {/* Create new team link with icon */}
                     <Button variant="outline" asChild className="whitespace-nowrap">
-                        <Link href="/teams/new">
+                        <Link href="/dashboard/teams/new">
                             <Plus className="mr-2 h-4 w-4" />
                             Create New Team
                         </Link>
