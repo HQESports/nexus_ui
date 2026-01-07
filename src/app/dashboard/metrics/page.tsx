@@ -3,6 +3,7 @@ import { getMatchDistribution } from "@/app/actions/metrics";
 import { calculatePercentage, formatList } from "@/lib/utils";
 import { MapDistributionChart } from "@/components/map-distribution-chart";
 import { PercentStatCard } from "@/components/percent-stats-card";
+export const dynamic = 'force-dynamic';
 
 export default async function Metrics() {
   const { success, data: metrics, error } = await getMatchDistribution();

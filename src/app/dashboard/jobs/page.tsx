@@ -6,7 +6,9 @@ import { JobTypesCard } from '@/components/job-types-card';
 import { JobSelector } from '@/components/job-selector';
 import StatusCard from '@/components/server-status-card';
 import ConditionalRender from '@/components/conditional-render';
+
 import JobsView from '@/components/jobs-view';
+export const dynamic = 'force-dynamic';
 
 export default async function JobDashboard() {
     // Sample placeholder data for grid items

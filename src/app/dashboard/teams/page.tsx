@@ -1,6 +1,7 @@
 import { getTeams } from "@/app/actions/teams";
 import { TeamCard } from "./team-card";
 import TeamList from "./teams-list";
+export const dynamic = 'force-dynamic';
 
 
 export default async function Page() {
